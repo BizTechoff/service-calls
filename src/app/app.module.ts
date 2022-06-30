@@ -23,6 +23,10 @@ import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question
 import { HomeComponent } from './home/home.component';
 import { AdminGuard, AdminOrManagerGuard, BedekGuard, ManagerGuard, ProfessionalGuard, TenantGuard } from "./users/AuthGuard";
 import { UsersComponent } from './users/users.component';
+import { RequestDetailsComponent } from './core/request/request-details/request-details.component';
+import { RequestsComponent } from './core/request/requests/requests.component';
+import { ProjectsComponent } from './core/project/projects/projects.component';
+import { TenantsComponent } from './core/tenant/tenants/tenants.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,11 @@ import { UsersComponent } from './users/users.component';
     UsersComponent,
     HomeComponent,
     YesNoQuestionComponent,
-    InputAreaComponent
+    InputAreaComponent,
+    RequestDetailsComponent,
+    RequestsComponent,
+    ProjectsComponent,
+    TenantsComponent
   ],
   imports: [
     BrowserModule,

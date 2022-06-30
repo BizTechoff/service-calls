@@ -1,27 +1,29 @@
+import { ErrorHandler, NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
 import { NotAuthenticatedGuard, RemultModule } from '@remult/angular';
-import { NgModule, ErrorHandler } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
 
-import { UsersComponent } from './users/users.component';
-import { AdminGuard, AdminOrManagerGuard } from "./users/AuthGuard";
-import { ShowDialogOnErrorErrorHandler } from './common/dialog';
 import { JwtModule } from '@auth0/angular-jwt';
 import { AuthService } from './auth.service';
+import { ShowDialogOnErrorErrorHandler } from './common/dialog';
+import { ProjectsComponent } from './core/project/projects/projects.component';
+import { RequestsComponent } from './core/request/requests/requests.component';
 import { terms } from './terms';
+import { AdminGuard, AdminOrManagerGuard } from "./users/AuthGuard";
+import { UsersComponent } from './users/users.component';
 
 const defaultRoute = terms.home;
 const routes: Routes = [
   { path: defaultRoute, component: HomeComponent, canActivate: [NotAuthenticatedGuard] },
-  { path: terms.projects, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.projects, component: ProjectsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.workManager, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
-  { path: terms.seviceCalls, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.requests, component: RequestsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.reports, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.professionals, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   // { path: terms.tenants, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.userAccounts, component: UsersComponent, canActivate: [AdminGuard] },
-  { path: '**', redirectTo: '/'+defaultRoute, pathMatch: 'full' }
+  { path: '**', redirectTo: '/' + defaultRoute, pathMatch: 'full' }
 ];
 
 @NgModule({

@@ -38,4 +38,4 @@ async function startup() {
     let port = process.env['PORT'] || 3002;
     app.listen(port);
 }
-startup();
+startup(); 

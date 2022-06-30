@@ -48,7 +48,7 @@ export const terms = {
     users: 'משתמשים',
     professionals:'בעלי מקצוע',
     tenants:'דיירים',
-    seviceCalls: 'פניות',
+    requests: 'פניות',
     projects:'פרויקטים',
     workManager:'מנהלי עבודה',
     welcome: 'ברוכים הבאים',

@@ -32,7 +32,7 @@
             <a matLine [routerLink]="m.path" (click)="routeClicked()">{{routeName(m)}}</a>
           </mat-list-item>
           
-          <mat-divider *ngIf="shouldDisplayRoute(m) && terms.seviceCalls === m.path"></mat-divider>
+          <mat-divider *ngIf="shouldDisplayRoute(m) && terms.requests === m.path"></mat-divider>
 
         </ng-container>
       </mat-nav-list>

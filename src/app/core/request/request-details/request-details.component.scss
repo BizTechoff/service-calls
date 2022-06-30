@@ -1,0 +1,23 @@
+.rd-container {
+    display: flex;
+    flex-direction: row;
+    background-color: green;
+}
+
+.rd-header {
+    display: flex;
+    flex-direction: row;
+    background-color: red;
+}
+
+.rd-body {
+    display: flex;
+    flex-direction: row;
+    background-color: blue;
+}
+
+.rd-footer {
+    display: flex;
+    flex-direction: row;
+    background-color: purple;
+}
