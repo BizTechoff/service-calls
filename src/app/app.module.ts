@@ -27,6 +27,9 @@ import { RequestDetailsComponent } from './core/request/request-details/request-
 import { RequestsComponent } from './core/request/requests/requests.component';
 import { ProjectsComponent } from './core/project/projects/projects.component';
 import { TenantsComponent } from './core/tenant/tenants/tenants.component';
+import { ComplexesComponent } from './core/complex/complexes/complexes.component';
+import { BuildingsComponent } from './core/building/buildings/buildings.component';
+import { ApartmentsComponent } from './core/apartment/apartments/apartments.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +41,10 @@ import { TenantsComponent } from './core/tenant/tenants/tenants.component';
     RequestDetailsComponent,
     RequestsComponent,
     ProjectsComponent,
-    TenantsComponent
+    TenantsComponent,
+    ComplexesComponent,
+    BuildingsComponent,
+    ApartmentsComponent
   ],
   imports: [
     BrowserModule,

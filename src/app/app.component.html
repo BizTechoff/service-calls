@@ -26,7 +26,9 @@
       <mat-nav-list role="list">
         <ng-container *ngFor="let m of router.config">
          
-          <mat-divider *ngIf="shouldDisplayRoute(m) && terms.userAccounts === m.path"></mat-divider>
+          <!-- <mat-divider *ngIf="shouldDisplayRoute(m) && terms.userAccounts === m.path"></mat-divider> -->
+          
+          <mat-divider *ngIf="shouldDisplayRoute(m) && terms.reports === m.path"></mat-divider>
           
           <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
             <a matLine [routerLink]="m.path" (click)="routeClicked()">{{routeName(m)}}</a>
