@@ -1,8 +1,8 @@
+import jwt from 'jsonwebtoken';
 import { BackendMethod, Controller, ControllerBase, Fields, UserInfo, Validators } from "remult";
 import { terms } from "../terms";
 import { Roles } from "./roles";
 import { User } from "./user";
-import jwt from 'jsonwebtoken';
 
 @Controller('signIn')
 export class SignInController extends ControllerBase {
@@ -32,7 +32,8 @@ export class SignInController extends ControllerBase {
             if (await userRepo.count() === 0) { //first ever user is the admin
                 u = await userRepo.insert({
                     name: this.user,
-                    admin: true
+                    admin: true,
+                    mobile: process.env['ADMIN_MOBILE']
                 })
             }
         }
@@ -46,10 +47,50 @@ export class SignInController extends ControllerBase {
             result = {
                 id: u.id,
                 roles: [],
-                name: u.name
+                name: u.name,
+                isAdmin: false,
+                isBedekManager: false,
+                isBedek: false,
+                isProfessional: false,
+                isTenant: false,
+                group: '',
+                isBuildingManager: false,
+                isInspector: false
             };
             if (u.admin) {
                 result.roles.push(Roles.admin);
+                result.isAdmin = true
+                result.group = Roles.admin
+            }
+            else if (u.bedekManager) {
+                result.roles.push(Roles.bedekManager);
+                result.isBedekManager = true
+                result.group = Roles.bedekManager
+            }
+            else if (u.bedek) {
+                result.roles.push(Roles.bedek);
+                result.isBedek = true
+                result.group = Roles.bedek
+            }
+            else if (u.buildingManager) {
+                result.roles.push(Roles.buildingManager);
+                result.isBuildingManager = true
+                result.group = Roles.buildingManager
+            }
+            else if (u.professional) {
+                result.roles.push(Roles.professional);
+                result.isProfessional = true
+                result.group = Roles.professional
+            }
+            else if (u.tenant) {
+                result.roles.push(Roles.tenant);
+                result.isTenant = true
+                result.group = Roles.tenant
+            }
+            else if (u.inspector) {
+                result.roles.push(Roles.inspector);
+                result.isInspector = true
+                result.group = Roles.inspector
             }
         }
 
@@ -61,6 +102,6 @@ export class SignInController extends ControllerBase {
 }
 export function getJwtSecret() {
     if (process.env['NODE_ENV'] === "production")
-        return process.env['JWT_SECRET']!;
-    return "my secret key";
+        return process.env['TOKEN_SIGN_KEY']!;
+    return process.env['JWT_SECRET']!;
 }

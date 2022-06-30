@@ -22,13 +22,17 @@
       <div style="width:100%;text-align: center">
 
       </div>
-      <h4 *ngIf="remult.authenticated()">{{terms.hello}} {{remult.user.name}}</h4>
+      <h4 style="margin-right: 4px;" *ngIf="remult.authenticated()">{{terms.hello}} {{remult.user.name}}</h4>
       <mat-nav-list role="list">
         <ng-container *ngFor="let m of router.config">
+         
+          <mat-divider *ngIf="shouldDisplayRoute(m) && terms.userAccounts === m.path"></mat-divider>
+          
           <mat-list-item *ngIf="shouldDisplayRoute(m)" routerLinkActive="active-route">
             <a matLine [routerLink]="m.path" (click)="routeClicked()">{{routeName(m)}}</a>
           </mat-list-item>
-
+          
+          <mat-divider *ngIf="shouldDisplayRoute(m) && terms.seviceCalls === m.path"></mat-divider>
 
         </ng-container>
       </mat-nav-list>

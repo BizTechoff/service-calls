@@ -52,7 +52,8 @@ export class AppComponent implements OnInit {
     openDialog(InputAreaComponent, i => i.args = {
       title: terms.updateInfo,
       fields: () => [
-        user.$.name
+        user.$.name,
+        user.$.mobile
       ],
       ok: async () => {
         await user._.save();
@@ -87,7 +88,7 @@ export class AppComponent implements OnInit {
         if (this.activeRoute.firstChild.routeConfig)
           return this.activeRoute.firstChild.routeConfig.path;
       }
-    return 'angular-starter-project';
+    return 'service-calls';
   }
 
   shouldDisplayRoute(route: Route) {

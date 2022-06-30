@@ -24,16 +24,27 @@ export class UsersComponent implements OnInit {
     allowDelete: true,
     allowInsert: true,
     allowUpdate: true,
-    numOfColumnsInGrid: 2,
+    numOfColumnsInGrid: 10,
 
-    orderBy: { name: "asc" },
-    rowsInPage: 100,
+    // orderBy: { name: "asc" },
+    rowsInPage: 25,
 
     columnSettings: users => [
       users.name,
-      users.admin
+      users.mobile,
+      users.admin,
+      users.bedekManager,
+      users.bedek,
+      users.professional,
+      users.tenant
     ],
+    gridButtons: [{
+      icon: 'refresh',
+      textInMenu: () => 'רענן',
+      click: async () => await this.refresh()
+    }],
     rowButtons: [{
+      icon:'password',
       name: terms.resetPassword,
       click: async () => {
 
@@ -50,6 +61,10 @@ export class UsersComponent implements OnInit {
   });
 
   ngOnInit() {
+  }
+
+  async refresh() {
+    await this.users.reloadData()
   }
 
 }
