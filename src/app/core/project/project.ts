@@ -9,7 +9,10 @@ export class Project extends IdEntity {
 
     @Fields.string({
         caption: 'שם פרוייקט',
-        validate: (row, col) => [Validators.required.withMessage(terms.requiredField), Validators.uniqueOnBackend.withMessage(terms.uniqueField)]
+        //(row, col) => 
+        validate: [
+            Validators.required.withMessage(terms.requiredField),
+            Validators.uniqueOnBackend.withMessage(terms.uniqueField)]
     })
     name = ''
 
