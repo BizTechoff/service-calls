@@ -1,4 +1,5 @@
-import { Allow, Entity, Fields, IdEntity } from "remult";
+import { Allow, Entity, Fields, IdEntity, Validators } from "remult";
+import { terms } from "../../terms";
 
 @Entity('projects', (options, remult) => {
     options.caption = 'פרויקט'
@@ -6,7 +7,10 @@ import { Allow, Entity, Fields, IdEntity } from "remult";
 })
 export class Project extends IdEntity {
 
-    @Fields.string({ caption: 'שם פרוייקט' })
+    @Fields.string({
+        caption: 'שם פרוייקט',
+        validate: (row, col) => [Validators.required.withMessage(terms.requiredField), Validators.uniqueOnBackend.withMessage(terms.uniqueField)]
+    })
     name = ''
 
     @Fields.string({ caption: 'כתובת' })

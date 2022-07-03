@@ -36,6 +36,7 @@ export class UsersComponent implements OnInit {
       users.bedekManager,
       users.bedek,
       users.professional,
+      users.inspector,
       users.tenant
     ],
     gridButtons: [{

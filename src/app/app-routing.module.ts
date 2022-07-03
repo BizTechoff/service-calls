@@ -15,15 +15,17 @@ import { UsersComponent } from './users/users.component';
 import { ComplexesComponent } from './core/complex/complexes/complexes.component';
 import { BuildingsComponent } from './core/building/buildings/buildings.component';
 import { ApartmentsComponent } from './core/apartment/apartments/apartments.component';
+import { TenantsComponent } from './core/tenant/tenants/tenants.component';
 
 const defaultRoute = terms.home;
 const routes: Routes = [
   { path: defaultRoute, component: HomeComponent, canActivate: [NotAuthenticatedGuard] },
   { path: terms.projects, component: ProjectsComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.tenants, component: TenantsComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.requests, component: RequestsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.complexes, component: ComplexesComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.buildings, component: BuildingsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.apartments, component: ApartmentsComponent, canActivate: [AdminOrManagerGuard] },
-  { path: terms.requests, component: RequestsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.workManager, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.professionals, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.reports, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
