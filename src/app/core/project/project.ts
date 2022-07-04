@@ -15,8 +15,21 @@ export class Project extends IdEntity {
             Validators.uniqueOnBackend.withMessage(terms.uniqueField)]
     })
     name = ''
+    
+    @Fields.string({
+        caption: 'מזהה פרוייקט',
+        //(row, col) => 
+        validate: [
+            Validators.required.withMessage(terms.requiredField),
+            Validators.uniqueOnBackend.withMessage(terms.uniqueField)]
+    })
+    idNumber = ''
 
-    @Fields.string({ caption: 'כתובת' })
+    @Fields.string({ caption: 'כתובת',
+    //(row, col) => 
+    validate: [
+        Validators.required.withMessage(terms.requiredField),
+        Validators.uniqueOnBackend.withMessage(terms.uniqueField)] })
     address = ''
 
 }

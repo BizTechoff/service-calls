@@ -36,17 +36,38 @@ export class ProjectsComponent implements OnInit {
         {
           click: async (row) => this.openBuildingManagers(row.id),
           showInLine: true,
-          textInMenu: 'מנהלי עבודה משוייכים'
+          textInMenu: 'מנהלי עבודה',
+          icon: 'engineering'
         },
         {
           click: async (row) => this.openBuildings(row.id),
           showInLine: true,
-          textInMenu: 'בניינים משוייכים'
+          textInMenu: 'בניינים',
+          icon: 'location_city'
         },
         {
           click: async (row) => this.openComplexes(row.id),
           showInLine: true,
-          textInMenu: 'מתחמים משוייכים'
+          textInMenu: 'מתחמים',
+          icon: 'workspaces'
+        },
+        {
+          click: async (row) => this.openApartments(row.id),
+          showInLine: true,
+          textInMenu: 'דירות',
+          icon: 'house'
+        },
+        {
+          click: async (row) => this.openTenants(row.id),
+          showInLine: true,
+          textInMenu: 'דיירים',
+          icon: 'groups'
+        },
+        {
+          click: async (row) => this.upsertProject(row.id),
+          showInLine: true,
+          textInMenu: 'פרטי פרויקט',
+          icon: 'edit'
         }
       ]
     })
@@ -55,20 +76,24 @@ export class ProjectsComponent implements OnInit {
   async upsertProject(pid = '') {
     if (!pid) pid = ''
     let p!: Project
+    let title = ''
     if (pid.length) {
       p = await this.remult.repo(Project).findId(pid)
       if (!p) throw `Project-Id '${pid}' NOT EXISTS`
+      title = `עדכון פרויקט ${p.idNumber}`
     }
     else {
       p = this.remult.repo(Project).create()
+      title = 'הוספת פרוייקט חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
-        title: 'פרוייקט חדש',
+        title: title,
         ok: async () => { await p.save() },
         fields: () => [
           p.$.name,
-          p.$.address]
+          p.$.address,
+          p.$.idNumber]
       },
       ref => ref ? ref.ok : false)
     if (changed) {
@@ -85,6 +110,14 @@ export class ProjectsComponent implements OnInit {
   }
 
   async openComplexes(pid = '') {
+
+  }
+
+  async openApartments(pid = '') {
+
+  }
+
+  async openTenants(pid = '') {
 
   }
 
