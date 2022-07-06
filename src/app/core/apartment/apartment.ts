@@ -9,8 +9,8 @@ import { Project } from "../project/project";
 })
 export class Apartment extends IdEntity {
 
-    @Field(() => Project, { caption: 'פרויקט' })
-    project!: Project
+    // @Field(() => Project, { caption: 'פרויקט' })
+    // project!: Project
 
     @Field(() => Building, { caption: 'בניין' })
     building!: Building

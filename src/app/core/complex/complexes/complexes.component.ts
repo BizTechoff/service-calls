@@ -23,7 +23,7 @@ export class ComplexesComponent implements OnInit {
   @DataControl<ComplexesComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש פנייה' })
+  @Fields.string({ caption: 'חיפוש מתחם' })
   search = ''//customSearch
 
   async ngOnInit() {
@@ -37,6 +37,11 @@ export class ComplexesComponent implements OnInit {
   async initGrid() {
     this.complexes = new GridSettings<Complex>(this.remult.repo(Complex), {
       where: { project: this.args.pid?.length ? { $id: this.args.pid } : undefined },
+      gridButtons: [{
+        icon: 'refresh',
+        textInMenu: () => 'רענן',
+        click: async () => await this.refresh()
+      }],
       rowButtons: [
         {
           click: async (row) => this.openBuildingManagers(row.id),

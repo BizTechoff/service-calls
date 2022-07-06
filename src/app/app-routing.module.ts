@@ -34,6 +34,7 @@ const routes: Routes = [
   { path: terms.subContractors, component: SubContractorsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.reports, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   // { path: terms.tenants, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
+  { path: 'טבלאות תשתית', component: UsersComponent, canActivate: [AdminGuard] },
   { path: terms.userAccounts, component: UsersComponent, canActivate: [AdminGuard] },
   { path: '**', redirectTo: '/' + defaultRoute, pathMatch: 'full' }
 ];

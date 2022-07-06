@@ -14,8 +14,9 @@ import { Building } from '../building';
 export class BuildingsComponent implements OnInit {
 
   args: {
-    cid: string
-  } = { cid: '' }
+    pid?:string,
+    cid?: string
+  } = { pid:'', cid: '' }
   buildings!: GridSettings<Building>
   constructor(private remult: Remult) { }
   get $() { return getFields(this, this.remult) };
@@ -37,6 +38,11 @@ export class BuildingsComponent implements OnInit {
   async initGrid() {
     this.buildings = new GridSettings<Building>(this.remult.repo(Building), {
       where: { complex: this.args.cid?.length ? { $id: this.args.cid } : undefined },
+      gridButtons: [{
+        icon: 'refresh',
+        textInMenu: () => 'רענן',
+        click: async () => await this.refresh()
+      }],
       rowButtons: [
         {
           click: async (row) => this.openBuildingManagers(row.id),
@@ -63,11 +69,11 @@ export class BuildingsComponent implements OnInit {
     if (cid.length) {
       c = await this.remult.repo(Building).findId(cid)
       if (!c) throw `Building-Id '${cid}' NOT EXISTS`
-      title = `עדכון מתחם ${c.name}`
+      title = `עדכון בניין ${c.name}`
     }
     else {
       c = this.remult.repo(Building).create()
-      title = 'הוספת מתחם חדשה'
+      title = 'הוספת בניין חדשה'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {

@@ -4,7 +4,11 @@ import { DataControl, GridSettings } from '@remult/angular/interfaces';
 import { Fields, getFields, Remult } from 'remult';
 import { InputAreaComponent } from '../../../common/input-area/input-area.component';
 import { ApartmentsComponent } from '../../apartment/apartments/apartments.component';
+import { BuildingsComponent } from '../../building/buildings/buildings.component';
 import { ComplexesComponent } from '../../complex/complexes/complexes.component';
+import { ConstructionContractorsComponent } from '../../construction-contractor/construction-contractors/construction-contractors.component';
+import { RequestsComponent } from '../../request/requests/requests.component';
+import { TenantsComponent } from '../../tenant/tenants/tenants.component';
 import { Project } from '../project';
 
 @Component({
@@ -34,6 +38,11 @@ export class ProjectsComponent implements OnInit {
 
   async initGrid() {
     this.projects = new GridSettings<Project>(this.remult.repo(Project), {
+      gridButtons: [{
+        icon: 'refresh',
+        textInMenu: () => 'רענן',
+        click: async () => await this.refresh()
+      }],
       rowButtons: [
         {//border_outer: project
           click: async (row) => this.openBuildingManagers(row.id),
@@ -64,6 +73,12 @@ export class ProjectsComponent implements OnInit {
           showInLine: true,
           textInMenu: 'דיירים',
           icon: 'groups'
+        },
+        {
+          click: async (row) => this.openRequests(row.id),
+          showInLine: true,
+          textInMenu: 'פניות',
+          icon: 'construction'
         },
         {
           click: async (row) => this.upsertProject(row.id),
@@ -104,22 +119,24 @@ export class ProjectsComponent implements OnInit {
   }
 
   async openBuildingManagers(pid = '') {
-
-  }
-
-  async openBuildings(pid = '') {
-
-  }
-
-  async openComplexes(pid = '') {
-    const changed = await openDialog(ComplexesComponent,
+    await openDialog(ConstructionContractorsComponent,
       ref => ref.args = {
         pid: pid
       })
-    //   ref => ref ? ref.ok : false)
-    // if (changed) {
-    //   this.refresh()
-    // }
+  }
+
+  async openBuildings(pid = '') {
+    await openDialog(BuildingsComponent,
+      ref => ref.args = {
+        pid: pid
+      })
+  }
+
+  async openComplexes(pid = '') {
+    await openDialog(ComplexesComponent,
+      ref => ref.args = {
+        pid: pid
+      })
   }
 
   async openApartments(pid = '') {
@@ -130,7 +147,17 @@ export class ProjectsComponent implements OnInit {
   }
 
   async openTenants(pid = '') {
+    await openDialog(TenantsComponent,
+      ref => ref.args = {
+        pid: pid
+      })
+  }
 
+  async openRequests(pid = '') {
+    await openDialog(RequestsComponent,
+      ref => ref.args = {
+        pid: pid
+      })
   }
 
 }

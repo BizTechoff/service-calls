@@ -37,9 +37,14 @@ export class ApartmentsComponent implements OnInit {
   async initGrid() {
     this.apartments = new GridSettings<Apartment>(this.remult.repo(Apartment), {
       where: {
-        project: this.args.pid?.length ? { $id: this.args.pid } : undefined,
+        // project: this.args.pid?.length ? { $id: this.args.pid } : undefined,
         building: this.args.bid?.length ? { $id: this.args.bid } : undefined
       },
+      gridButtons: [{
+        icon: 'refresh',
+        textInMenu: () => 'רענן',
+        click: async () => await this.refresh()
+      }],
       rowButtons: [
         {
           click: async (row) => this.openBuildingManagers(row.id),

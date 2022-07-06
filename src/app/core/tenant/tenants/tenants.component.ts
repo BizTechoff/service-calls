@@ -12,6 +12,10 @@ import { User } from '../../../users/user';
 })
 export class TenantsComponent implements OnInit {
 
+  args: {
+    pid?: string,
+    bid?: string
+  } = { pid: '', bid: '' }
   tenants!: GridSettings<User>
   constructor(private remult: Remult) { }
 

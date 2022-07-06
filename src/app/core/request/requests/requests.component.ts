@@ -11,6 +11,11 @@ import { Request } from '../request';
 })
 export class RequestsComponent implements OnInit {
 
+  args: {
+    pid?: string,
+    bid?: string,
+    aid?: string
+  } = { pid: '', bid: '', aid: '' }
   requests!: GridSettings<Request>
   constructor(private remult: Remult) { }
   get $() { return getFields(this, this.remult) };
@@ -31,6 +36,11 @@ export class RequestsComponent implements OnInit {
 
   async initGrid() {
     this.requests = new GridSettings<Request>(this.remult.repo(Request), {
+      gridButtons: [{
+        icon: 'refresh',
+        textInMenu: () => 'רענן',
+        click: async () => await this.refresh()
+      }],
       rowButtons: [
         {//border_outer: project
           click: async (row) => this.openBuildingManagers(row.id),
