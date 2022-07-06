@@ -72,15 +72,15 @@ export class SignInController extends ControllerBase {
                 result.isBedek = true
                 result.group = Roles.bedek
             }
-            else if (u.buildingManager) {
-                result.roles.push(Roles.buildingManager);
+            else if (u.constructionContractor) {
+                result.roles.push(Roles.constructionContractor);
                 result.isBuildingManager = true
-                result.group = Roles.buildingManager
+                result.group = Roles.constructionContractor
             }
-            else if (u.professional) {
-                result.roles.push(Roles.professional);
+            else if (u.subContractor) {
+                result.roles.push(Roles.subContractor);
                 result.isProfessional = true
-                result.group = Roles.professional
+                result.group = Roles.subContractor
             }
             else if (u.tenant) {
                 result.roles.push(Roles.tenant);

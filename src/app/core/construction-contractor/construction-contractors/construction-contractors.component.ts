@@ -6,21 +6,21 @@ import { InputAreaComponent } from '../../../common/input-area/input-area.compon
 import { User } from '../../../users/user';
 
 @Component({
-  selector: 'app-tenants',
-  templateUrl: './tenants.component.html',
-  styleUrls: ['./tenants.component.scss']
+  selector: 'app-construction-contractors',
+  templateUrl: './construction-contractors.component.html',
+  styleUrls: ['./construction-contractors.component.scss']
 })
-export class TenantsComponent implements OnInit {
+export class ConstructionContractorsComponent implements OnInit {
 
   tenants!: GridSettings<User>
   constructor(private remult: Remult) { }
 
   get $() { return getFields(this, this.remult) };
 
-  @DataControl<TenantsComponent>({
+  @DataControl<ConstructionContractorsComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש פרוייקט' })
+  @Fields.string({ caption: 'חיפוש מנהל עבודה' })
   search = ''//customSearch
 
   async ngOnInit() {
@@ -33,7 +33,7 @@ export class TenantsComponent implements OnInit {
 
   async initGrid() {
     this.tenants = new GridSettings<User>(this.remult.repo(User), {
-      where: { tenant: true },
+      where: { constructionContractor: true },
       numOfColumnsInGrid: 10,
       columnSettings: (row) => [
         row.name,
@@ -53,19 +53,19 @@ export class TenantsComponent implements OnInit {
     })
   }
 
-  async upsertTenant(tid = '') {
-    if (!tid) tid = ''
+  async upsertConstructionContractor(iid = '') {
+    if (!iid) iid = ''
     let t!: User
     let title = ''
-    if (tid.length) {
-      t = await this.remult.repo(User).findId(tid)
-      if (!t) throw `Tenant-Id '${tid}' NOT EXISTS`
-      title = `עדכון דייר ${t.name}`
+    if (iid.length) {
+      t = await this.remult.repo(User).findId(iid)
+      if (!t) throw `Inspector-Id '${iid}' NOT EXISTS`
+      title = `עדכון מנהל עבודה ${t.name}`
     }
     else {
       t = this.remult.repo(User).create()
       t.tenant = true
-      title = 'הוספת דייר חדש'
+      title = 'הוספת מנהל עבודה חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {

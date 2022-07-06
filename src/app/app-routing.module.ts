@@ -16,6 +16,9 @@ import { ComplexesComponent } from './core/complex/complexes/complexes.component
 import { BuildingsComponent } from './core/building/buildings/buildings.component';
 import { ApartmentsComponent } from './core/apartment/apartments/apartments.component';
 import { TenantsComponent } from './core/tenant/tenants/tenants.component';
+import { InspectorsComponent } from './core/inspector/inspectors/inspectors.component';
+import { ConstructionContractorsComponent } from './core/construction-contractor/construction-contractors/construction-contractors.component';
+import { SubContractorsComponent } from './core/sub-contractor/sub-contractors/sub-contractors.component';
 
 const defaultRoute = terms.home;
 const routes: Routes = [
@@ -26,8 +29,9 @@ const routes: Routes = [
   { path: terms.complexes, component: ComplexesComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.buildings, component: BuildingsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.apartments, component: ApartmentsComponent, canActivate: [AdminOrManagerGuard] },
-  { path: terms.workManager, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
-  { path: terms.professionals, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.inspectors, component: InspectorsComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.workManager, component: ConstructionContractorsComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.subContractors, component: SubContractorsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.reports, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   // { path: terms.tenants, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.userAccounts, component: UsersComponent, canActivate: [AdminGuard] },

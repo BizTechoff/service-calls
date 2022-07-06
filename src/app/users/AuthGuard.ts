@@ -27,10 +27,10 @@ export class BedekGuard extends AuthenticatedGuard {
 }
 
 @Injectable()
-export class ProfessionalGuard extends AuthenticatedGuard {
+export class SubContractorGuard extends AuthenticatedGuard {
 
     override isAllowed() {
-        return Roles.professional;
+        return Roles.subContractor;
     }
 }
 

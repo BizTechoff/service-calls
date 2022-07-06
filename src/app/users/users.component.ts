@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { Fields, getFields, Remult } from 'remult';
 import { User } from './user';
-import { BackendMethod, Remult } from 'remult';
 
+import { openDialog } from '@remult/angular';
+import { DataControl, GridSettings } from '@remult/angular/interfaces';
 import { DialogService } from '../common/dialog';
-import { Roles } from './roles';
-import { GridSettings } from '@remult/angular/interfaces';
+import { InputAreaComponent } from '../common/input-area/input-area.component';
 import { terms } from '../terms';
+import { Roles } from './roles';
 
 
 @Component({
@@ -15,6 +17,21 @@ import { terms } from '../terms';
 })
 export class UsersComponent implements OnInit {
   constructor(private dialog: DialogService, public remult: Remult) {
+  }
+  get $() { return getFields(this, this.remult) };
+
+  @DataControl<UsersComponent>({
+    valueChange: async (row, col) => await row?.refresh()
+  })
+  @Fields.string({ caption: 'חיפוש פרוייקט' })
+  search = ''//customSearch
+
+  async ngOnInit() {
+    // await this.initGrid()
+  }
+
+  async refresh() {
+    await this.users.reloadData()
   }
   isAdmin() {
     return this.remult.isAllowed(Roles.admin);
@@ -35,8 +52,9 @@ export class UsersComponent implements OnInit {
       users.admin,
       users.bedekManager,
       users.bedek,
-      users.professional,
       users.inspector,
+      users.constructionContractor,
+      users.subContractor,
       users.tenant
     ],
     gridButtons: [{
@@ -45,7 +63,7 @@ export class UsersComponent implements OnInit {
       click: async () => await this.refresh()
     }],
     rowButtons: [{
-      icon:'password',
+      icon: 'password',
       name: terms.resetPassword,
       click: async () => {
 
@@ -61,11 +79,32 @@ export class UsersComponent implements OnInit {
     },
   });
 
-  ngOnInit() {
-  }
-
-  async refresh() {
-    await this.users.reloadData()
+  async upsertUser(uid = '') {
+    if (!uid) uid = ''
+    let u!: User
+    let title = ''
+    if (uid.length) {
+      u = await this.remult.repo(User).findId(uid)
+      if (!u) throw `Project-Id '${uid}' NOT EXISTS`
+      title = `עדכון משתמש ${u.name}`
+    }
+    else {
+      u = this.remult.repo(User).create()
+      title = 'הוספת משתמש חדש'
+    }
+    const changed = await openDialog(InputAreaComponent,
+      ref => ref.args = {
+        title: title,
+        ok: async () => { await u.save() },
+        fields: () => [
+          u.$.name,
+          u.$.mobile,
+          u.$.email]
+      },
+      ref => ref ? ref.ok : false)
+    if (changed) {
+      this.refresh()
+    }
   }
 
 }

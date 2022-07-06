@@ -21,7 +21,7 @@ import { DialogService } from './common/dialog';
 import { InputAreaComponent } from './common/input-area/input-area.component';
 import { YesNoQuestionComponent } from './common/yes-no-question/yes-no-question.component';
 import { HomeComponent } from './home/home.component';
-import { AdminGuard, AdminOrManagerGuard, BedekGuard, ManagerGuard, ProfessionalGuard, TenantGuard } from "./users/AuthGuard";
+import { AdminGuard, AdminOrManagerGuard, BedekGuard, ManagerGuard, SubContractorGuard, TenantGuard } from "./users/AuthGuard";
 import { UsersComponent } from './users/users.component';
 import { RequestDetailsComponent } from './core/request/request-details/request-details.component';
 import { RequestsComponent } from './core/request/requests/requests.component';
@@ -30,6 +30,10 @@ import { TenantsComponent } from './core/tenant/tenants/tenants.component';
 import { ComplexesComponent } from './core/complex/complexes/complexes.component';
 import { BuildingsComponent } from './core/building/buildings/buildings.component';
 import { ApartmentsComponent } from './core/apartment/apartments/apartments.component';
+import { TenantDetailsComponent } from './core/tenant/tenant-details/tenant-details.component';
+import { SubContractorsComponent } from './core/sub-contractor/sub-contractors/sub-contractors.component';
+import { InspectorsComponent } from './core/inspector/inspectors/inspectors.component';
+import { ConstructionContractorsComponent } from './core/construction-contractor/construction-contractors/construction-contractors.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,11 @@ import { ApartmentsComponent } from './core/apartment/apartments/apartments.comp
     TenantsComponent,
     ComplexesComponent,
     BuildingsComponent,
-    ApartmentsComponent
+    ApartmentsComponent,
+    TenantDetailsComponent,
+    SubContractorsComponent,
+    InspectorsComponent,
+    ConstructionContractorsComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +72,7 @@ import { ApartmentsComponent } from './core/apartment/apartments/apartments.comp
     MatMenuModule,
     RemultModule
   ],
-  providers: [DialogService, AdminGuard, ManagerGuard, BedekGuard, ProfessionalGuard, TenantGuard
+  providers: [DialogService, AdminGuard, ManagerGuard, BedekGuard, SubContractorGuard, TenantGuard
     , AdminOrManagerGuard],
   bootstrap: [AppComponent],
   entryComponents: [YesNoQuestionComponent, InputAreaComponent]

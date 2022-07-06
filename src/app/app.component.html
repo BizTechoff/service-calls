@@ -20,7 +20,7 @@
     <mat-sidenav #sidenav class="app-sidenav mat-elevation-z10 no-print" [opened]="!dialogService.isScreenSmall()"
       [mode]="dialogService.isScreenSmall()?'over':'side'">
       <div style="width:100%;text-align: center">
-
+ 
       </div>
       <h4 style="margin-right: 4px;" *ngIf="remult.authenticated()">{{terms.hello}} {{remult.user.name}}</h4>
       <mat-nav-list role="list">
@@ -50,4 +50,11 @@
     </div>
 
   </mat-sidenav-container>
+  <div class="footer" style="font-size: smaller;">
+    <div style="display:flex;flex-direction: row;justify-content: flex-end;">
+      <div style="margin-left: 3px; cursor: pointer;" (click)="openSite('https://biztechoff.co.il')"> {{ 'BizTechoff::v'
+        + terms.appVersion }} </div>
+    </div>
+  </div>
+
 </div>

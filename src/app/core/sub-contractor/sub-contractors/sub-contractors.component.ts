@@ -6,21 +6,21 @@ import { InputAreaComponent } from '../../../common/input-area/input-area.compon
 import { User } from '../../../users/user';
 
 @Component({
-  selector: 'app-tenants',
-  templateUrl: './tenants.component.html',
-  styleUrls: ['./tenants.component.scss']
+  selector: 'app-sub-contractors',
+  templateUrl: './sub-contractors.component.html',
+  styleUrls: ['./sub-contractors.component.scss']
 })
-export class TenantsComponent implements OnInit {
+export class SubContractorsComponent implements OnInit {
 
   tenants!: GridSettings<User>
   constructor(private remult: Remult) { }
 
   get $() { return getFields(this, this.remult) };
 
-  @DataControl<TenantsComponent>({
+  @DataControl<SubContractorsComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש פרוייקט' })
+  @Fields.string({ caption: 'חיפוש קבלן משנה עבודה' })
   search = ''//customSearch
 
   async ngOnInit() {
@@ -33,7 +33,7 @@ export class TenantsComponent implements OnInit {
 
   async initGrid() {
     this.tenants = new GridSettings<User>(this.remult.repo(User), {
-      where: { tenant: true },
+      where: { subContractor: true },
       numOfColumnsInGrid: 10,
       columnSettings: (row) => [
         row.name,
@@ -53,19 +53,19 @@ export class TenantsComponent implements OnInit {
     })
   }
 
-  async upsertTenant(tid = '') {
-    if (!tid) tid = ''
+  async upsertSubContractor(iid = '') {
+    if (!iid) iid = ''
     let t!: User
     let title = ''
-    if (tid.length) {
-      t = await this.remult.repo(User).findId(tid)
-      if (!t) throw `Tenant-Id '${tid}' NOT EXISTS`
-      title = `עדכון דייר ${t.name}`
+    if (iid.length) {
+      t = await this.remult.repo(User).findId(iid)
+      if (!t) throw `Inspector-Id '${iid}' NOT EXISTS`
+      title = `עדכון קבלן משנה ${t.name}`
     }
     else {
       t = this.remult.repo(User).create()
       t.tenant = true
-      title = 'הוספת דייר חדש'
+      title = 'הוספת קבלן משנה חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {

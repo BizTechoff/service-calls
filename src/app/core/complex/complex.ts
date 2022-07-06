@@ -7,7 +7,10 @@ import { Project } from "../project/project";
 })
 export class Complex extends IdEntity {
 
-    @Field(() => Project, { caption: 'פרויקט' })
+    @Field(() => Project, {
+        caption: 'פרויקט',
+        displayValue: (row, col) => col?.$.name?.value
+    })
     project!: Project
 
     @Fields.string({ caption: 'שם מתחם' })

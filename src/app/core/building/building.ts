@@ -1,6 +1,5 @@
 import { Allow, Entity, Field, Fields, IdEntity } from "remult";
 import { Complex } from "../complex/complex";
-import { Project } from "../project/project";
 
 @Entity('buildings', (options, remult) => {
     options.caption = 'בניין'
@@ -8,7 +7,10 @@ import { Project } from "../project/project";
 })
 export class Building extends IdEntity {
 
-    @Field(() => Complex, { caption: 'מתחם' })
+    @Field(() => Complex, {
+        caption: 'מתחם',
+        displayValue: (row, col) => col?.$.name?.value
+    })
     complex!: Complex
 
     @Fields.string({ caption: 'שם בניין' })

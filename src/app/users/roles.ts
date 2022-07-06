@@ -1,10 +1,9 @@
-export const Roles = { 
+export const Roles = {
     admin: 'admin',
     bedekManager: 'bedek-manager',
     bedek: 'bedek',
-    professional: 'professional',
-    //קבלן בינוי
-    buildingManager: 'building-manager',
-    inspector:'inspector',//מפקח
+    inspector: 'inspector',//מפקח
+    constructionContractor: 'construction-contractor',//קבלן בינוי
+    subContractor: 'sub-contractor',//קבלן משנה
     tenant: 'tenant'
 }

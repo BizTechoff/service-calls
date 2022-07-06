@@ -14,7 +14,9 @@ import { Roles } from './roles';
         admin: "desc",
         bedekManager: "desc",
         bedek: "desc",
-        professional: "desc",
+        inspector: "desc",
+        constructionContractor: "desc",
+        subContractor: "desc",
         tenant: "desc",
         name: "asc"
     }
@@ -22,6 +24,9 @@ import { Roles } from './roles';
         if (isBackend()) {
             if (user._.isNew()) {
                 user.createDate = new Date();
+            }
+            if (!user.password) {
+                user.hashAndSetPassword(process.env['DEFAULT_PASSWORD']!)
             }
         }
     }
@@ -47,6 +52,13 @@ export class User extends IdEntity {
     })
     mobile = '';
 
+    @DataControl<User, string>({ width: '108' })
+    @Fields.string((options, remult) => {
+        // options.validate = [Validators.required, Validators.uniqueOnBackend]
+        options.caption = 'אימייל'
+    })
+    email = '';
+
     @Fields.string({ includeInApi: false })
     password = '';
 
@@ -61,11 +73,11 @@ export class User extends IdEntity {
             if (col.value) {
                 row.bedekManager = false
                 row.bedek = false
-                row.professional = false
-                row.tenant = false
-                row.buildingManager = false
                 row.inspector = false
-            }
+                row.constructionContractor = false
+                row.subContractor = false
+                row.tenant = false
+            } 
         }
     })
     @Fields.boolean({
@@ -81,16 +93,16 @@ export class User extends IdEntity {
             if (col.value) {
                 row.admin = false
                 row.bedek = false
-                row.professional = false
+                row.subContractor = false
                 row.tenant = false
-                row.buildingManager = false
+                row.constructionContractor = false
                 row.inspector = false
             }
         }
     })
     @Fields.boolean({
         allowApiUpdate: Roles.admin,
-        caption: terms.manager
+        caption: terms.bedekManager
     })
     bedekManager = false;
 
@@ -100,9 +112,9 @@ export class User extends IdEntity {
             if (col.value) {
                 row.admin = false
                 row.bedekManager = false
-                row.professional = false
+                row.subContractor = false
                 row.tenant = false
-                row.buildingManager = false
+                row.constructionContractor = false
                 row.inspector = false
             }
         }
@@ -119,7 +131,7 @@ export class User extends IdEntity {
             if (col.value) {
                 row.admin = false
                 row.bedek = false
-                row.professional = false
+                row.subContractor = false
                 row.tenant = false
                 row.inspector = false
             }
@@ -127,9 +139,9 @@ export class User extends IdEntity {
     })
     @Fields.boolean({
         allowApiUpdate: Roles.admin,
-        caption: 'מנהל עבודה'
+        caption: 'קבלן בינוי'
     })
-    buildingManager = false;
+    constructionContractor = false;
 
     @DataControl<User, boolean>({
         width: '88',
@@ -137,7 +149,7 @@ export class User extends IdEntity {
             if (col.value) {
                 row.admin = false
                 row.bedek = false
-                row.professional = false
+                row.subContractor = false
                 row.tenant = false
             }
         }
@@ -156,15 +168,15 @@ export class User extends IdEntity {
                 row.bedekManager = false
                 row.bedek = false
                 row.tenant = false
-                row.buildingManager = false
+                row.constructionContractor = false
                 row.inspector = false
             }
         }
     }) @Fields.boolean({
         allowApiUpdate: Roles.admin,
-        caption: terms.professional
+        caption: terms.subContractor
     })
-    professional = false;
+    subContractor = false;
 
     @DataControl<User, boolean>({
         width: '88',
@@ -173,8 +185,8 @@ export class User extends IdEntity {
                 row.admin = false
                 row.bedekManager = false
                 row.bedek = false
-                row.professional = false
-                row.buildingManager = false
+                row.subContractor = false
+                row.constructionContractor = false
                 row.inspector = false
             }
         }

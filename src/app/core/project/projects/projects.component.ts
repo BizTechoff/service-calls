@@ -3,6 +3,8 @@ import { openDialog } from '@remult/angular';
 import { DataControl, GridSettings } from '@remult/angular/interfaces';
 import { Fields, getFields, Remult } from 'remult';
 import { InputAreaComponent } from '../../../common/input-area/input-area.component';
+import { ApartmentsComponent } from '../../apartment/apartments/apartments.component';
+import { ComplexesComponent } from '../../complex/complexes/complexes.component';
 import { Project } from '../project';
 
 @Component({
@@ -33,23 +35,23 @@ export class ProjectsComponent implements OnInit {
   async initGrid() {
     this.projects = new GridSettings<Project>(this.remult.repo(Project), {
       rowButtons: [
-        {
+        {//border_outer: project
           click: async (row) => this.openBuildingManagers(row.id),
           showInLine: true,
           textInMenu: 'מנהלי עבודה',
           icon: 'engineering'
         },
         {
-          click: async (row) => this.openBuildings(row.id),
-          showInLine: true,
-          textInMenu: 'בניינים',
-          icon: 'location_city'
-        },
-        {
           click: async (row) => this.openComplexes(row.id),
           showInLine: true,
           textInMenu: 'מתחמים',
           icon: 'workspaces'
+        },
+        {
+          click: async (row) => this.openBuildings(row.id),
+          showInLine: true,
+          textInMenu: 'בניינים',
+          icon: 'location_city'
         },
         {
           click: async (row) => this.openApartments(row.id),
@@ -110,11 +112,21 @@ export class ProjectsComponent implements OnInit {
   }
 
   async openComplexes(pid = '') {
-
+    const changed = await openDialog(ComplexesComponent,
+      ref => ref.args = {
+        pid: pid
+      })
+    //   ref => ref ? ref.ok : false)
+    // if (changed) {
+    //   this.refresh()
+    // }
   }
 
   async openApartments(pid = '') {
-
+    const changed = await openDialog(ApartmentsComponent,
+      ref => ref.args = {
+        pid: pid
+      })
   }
 
   async openTenants(pid = '') {
