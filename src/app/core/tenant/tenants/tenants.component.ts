@@ -14,8 +14,10 @@ export class TenantsComponent implements OnInit {
 
   args: {
     pid?: string,
-    bid?: string
-  } = { pid: '', bid: '' }
+    cid?: string,
+    bid?: string,
+    aid?: string
+  } = { pid: '', cid: '', bid: '', aid: '' }
   tenants!: GridSettings<User>
   constructor(private remult: Remult) { }
 
@@ -24,7 +26,7 @@ export class TenantsComponent implements OnInit {
   @DataControl<TenantsComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש פרוייקט' })
+  @Fields.string({ caption: 'חיפוש דייר' })
   search = ''//customSearch
 
   async ngOnInit() {

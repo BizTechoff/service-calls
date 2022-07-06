@@ -20,7 +20,7 @@ export class SubContractorsComponent implements OnInit {
   @DataControl<SubContractorsComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש קבלן משנה עבודה' })
+  @Fields.string({ caption: 'חיפוש קבלן משנה' })
   search = ''//customSearch
 
   async ngOnInit() {

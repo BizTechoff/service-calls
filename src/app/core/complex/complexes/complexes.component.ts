@@ -3,7 +3,11 @@ import { openDialog } from '@remult/angular';
 import { DataControl, GridSettings } from '@remult/angular/interfaces';
 import { Fields, getFields, Remult } from 'remult';
 import { InputAreaComponent } from '../../../common/input-area/input-area.component';
+import { ApartmentsComponent } from '../../apartment/apartments/apartments.component';
 import { BuildingsComponent } from '../../building/buildings/buildings.component';
+import { ConstructionContractorsComponent } from '../../construction-contractor/construction-contractors/construction-contractors.component';
+import { RequestsComponent } from '../../request/requests/requests.component';
+import { TenantsComponent } from '../../tenant/tenants/tenants.component';
 import { Complex } from '../complex';
 
 @Component({
@@ -14,8 +18,11 @@ import { Complex } from '../complex';
 export class ComplexesComponent implements OnInit {
 
   args: {
-    pid: string
-  } = { pid: '' }
+    pid?: string,
+    cid?: string,
+    bid?: string,
+    aid?: string
+  } = { pid: '', cid: '', bid: '', aid: '' }
   complexes!: GridSettings<Complex>
   constructor(private remult: Remult) { }
   get $() { return getFields(this, this.remult) };
@@ -43,9 +50,17 @@ export class ComplexesComponent implements OnInit {
         click: async () => await this.refresh()
       }],
       rowButtons: [
-        {
+        {//border_outer: project
           click: async (row) => this.openBuildingManagers(row.id),
-          showInLine: true
+          showInLine: true,
+          textInMenu: 'מנהלי עבודה',
+          icon: 'engineering'
+        },
+        {
+          click: async (row) => this.openComplexes(row.id),
+          showInLine: true,
+          textInMenu: 'מתחמים',
+          icon: 'workspaces'
         },
         {
           click: async (row) => this.openBuildings(row.id),
@@ -54,8 +69,28 @@ export class ComplexesComponent implements OnInit {
           icon: 'location_city'
         },
         {
-          click: async (row) => this.openComplexes(row.id),
-          showInLine: true
+          click: async (row) => this.openApartments(row.id),
+          showInLine: true,
+          textInMenu: 'דירות',
+          icon: 'house'
+        },
+        {
+          click: async (row) => this.openTenants(row.id),
+          showInLine: true,
+          textInMenu: 'דיירים',
+          icon: 'groups'
+        },
+        {
+          click: async (row) => this.openRequests(row.id),
+          showInLine: true,
+          textInMenu: 'פניות',
+          icon: 'construction'
+        },
+        {
+          click: async (row) => this.upsertComplex(row.id),
+          showInLine: true,
+          textInMenu: 'פרטי פרויקט',
+          icon: 'edit'
         }
       ]
     })
@@ -89,18 +124,45 @@ export class ComplexesComponent implements OnInit {
   }
 
   async openBuildingManagers(cid = '') {
-
+    await openDialog(ConstructionContractorsComponent,
+      ref => ref.args = {
+        cid: cid
+      })
   }
 
   async openBuildings(cid = '') {
-    const changed = await openDialog(BuildingsComponent,
+    await openDialog(BuildingsComponent,
       ref => ref.args = {
         cid: cid
       })
   }
 
   async openComplexes(cid = '') {
+    await openDialog(ComplexesComponent,
+      ref => ref.args = {
+        cid: cid
+      })
+  }
 
+  async openApartments(cid = '') {
+    const changed = await openDialog(ApartmentsComponent,
+      ref => ref.args = {
+        cid: cid
+      })
+  }
+
+  async openTenants(cid = '') {
+    await openDialog(TenantsComponent,
+      ref => ref.args = {
+        cid: cid
+      })
+  }
+
+  async openRequests(cid = '') {
+    await openDialog(RequestsComponent,
+      ref => ref.args = {
+        cid: cid
+      })
   }
 
 }

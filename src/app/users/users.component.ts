@@ -23,7 +23,7 @@ export class UsersComponent implements OnInit {
   @DataControl<UsersComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש פרוייקט' })
+  @Fields.string({ caption: 'חיפוש משתמש' })
   search = ''//customSearch
 
   async ngOnInit() {

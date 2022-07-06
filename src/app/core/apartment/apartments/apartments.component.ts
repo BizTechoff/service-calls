@@ -3,6 +3,11 @@ import { openDialog } from '@remult/angular';
 import { DataControl, GridSettings } from '@remult/angular/interfaces';
 import { Fields, getFields, Remult } from 'remult';
 import { InputAreaComponent } from '../../../common/input-area/input-area.component';
+import { BuildingsComponent } from '../../building/buildings/buildings.component';
+import { ComplexesComponent } from '../../complex/complexes/complexes.component';
+import { ConstructionContractorsComponent } from '../../construction-contractor/construction-contractors/construction-contractors.component';
+import { RequestsComponent } from '../../request/requests/requests.component';
+import { TenantsComponent } from '../../tenant/tenants/tenants.component';
 import { Apartment } from '../apartment';
 
 @Component({
@@ -14,8 +19,10 @@ export class ApartmentsComponent implements OnInit {
 
   args: {
     pid?: string,
-    bid?: string
-  } = { pid: '', bid: '' }
+    cid?: string,
+    bid?: string,
+    aid?: string
+  } = { pid: '', cid: '', bid: '', aid: '' }
   apartments!: GridSettings<Apartment>
   constructor(private remult: Remult) { }
   get $() { return getFields(this, this.remult) };
@@ -46,29 +53,59 @@ export class ApartmentsComponent implements OnInit {
         click: async () => await this.refresh()
       }],
       rowButtons: [
-        {
+        {//border_outer: project
           click: async (row) => this.openBuildingManagers(row.id),
-          showInLine: true
-        },
-        {
-          click: async (row) => this.openBuildings(row.id),
-          showInLine: true
+          showInLine: true,
+          textInMenu: 'מנהלי עבודה',
+          icon: 'engineering'
         },
         {
           click: async (row) => this.openComplexes(row.id),
-          showInLine: true
+          showInLine: true,
+          textInMenu: 'מתחמים',
+          icon: 'workspaces'
+        },
+        {
+          click: async (row) => this.openBuildings(row.id),
+          showInLine: true,
+          textInMenu: 'בניינים',
+          icon: 'location_city'
+        },
+        {
+          click: async (row) => this.openApartments(row.id),
+          showInLine: true,
+          textInMenu: 'דירות',
+          icon: 'house'
+        },
+        {
+          click: async (row) => this.openTenants(row.id),
+          showInLine: true,
+          textInMenu: 'דיירים',
+          icon: 'groups'
+        },
+        {
+          click: async (row) => this.openRequests(row.id),
+          showInLine: true,
+          textInMenu: 'פניות',
+          icon: 'construction'
+        },
+        {
+          click: async (row) => this.upsertApartment(row.id),
+          showInLine: true,
+          textInMenu: 'פרטי פרויקט',
+          icon: 'edit'
         }
       ]
     })
   }
 
-  async upsertBuilding(cid = '') {
-    if (!cid) cid = ''
+  async upsertApartment(aid = '') {
+    if (!aid) aid = ''
     let c!: Apartment
     let title = ''
-    if (cid.length) {
-      c = await this.remult.repo(Apartment).findId(cid)
-      if (!c) throw `Apartment-Id '${cid}' NOT EXISTS`
+    if (aid.length) {
+      c = await this.remult.repo(Apartment).findId(aid)
+      if (!c) throw `Apartment-Id '${aid}' NOT EXISTS`
       title = `עדכון דירה ${c.number}`
     }
     else {
@@ -89,16 +126,46 @@ export class ApartmentsComponent implements OnInit {
     }
   }
 
-  async openBuildingManagers(cid = '') {
-
+  async openBuildingManagers(aid = '') {
+    await openDialog(ConstructionContractorsComponent,
+      ref => ref.args = {
+        aid: aid
+      })
   }
 
-  async openBuildings(cid = '') {
-
+  async openBuildings(aid = '') {
+    await openDialog(BuildingsComponent,
+      ref => ref.args = {
+        aid: aid
+      })
   }
 
-  async openComplexes(cid = '') {
+  async openComplexes(aid = '') {
+    await openDialog(ComplexesComponent,
+      ref => ref.args = {
+        aid: aid
+      })
+  }
 
+  async openApartments(aid = '') {
+    const changed = await openDialog(ApartmentsComponent,
+      ref => ref.args = {
+        aid: aid
+      })
+  }
+
+  async openTenants(aid = '') {
+    await openDialog(TenantsComponent,
+      ref => ref.args = {
+        aid: aid
+      })
+  }
+
+  async openRequests(aid = '') {
+    await openDialog(RequestsComponent,
+      ref => ref.args = {
+        aid: aid
+      })
   }
 
 }

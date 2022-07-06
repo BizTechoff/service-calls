@@ -18,6 +18,12 @@ import { Project } from '../project';
 })
 export class ProjectsComponent implements OnInit {
 
+  args: {
+    pid?: string,
+    cid?: string,
+    bid?: string,
+    aid?: string
+  } = { pid: '', cid: '', bid: '', aid: '' }
   projects!: GridSettings<Project>
   constructor(private remult: Remult) { }
   get $() { return getFields(this, this.remult) };

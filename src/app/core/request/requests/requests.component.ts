@@ -13,9 +13,10 @@ export class RequestsComponent implements OnInit {
 
   args: {
     pid?: string,
+    cid?: string,
     bid?: string,
     aid?: string
-  } = { pid: '', bid: '', aid: '' }
+  } = { pid: '', cid: '', bid: '', aid: '' }
   requests!: GridSettings<Request>
   constructor(private remult: Remult) { }
   get $() { return getFields(this, this.remult) };
