@@ -55,26 +55,26 @@ export class SubContractorsComponent implements OnInit {
 
   async upsertSubContractor(iid = '') {
     if (!iid) iid = ''
-    let t!: User
+    let sc!: User
     let title = ''
     if (iid.length) {
-      t = await this.remult.repo(User).findId(iid)
-      if (!t) throw `Inspector-Id '${iid}' NOT EXISTS`
-      title = `עדכון קבלן משנה ${t.name}`
+      sc = await this.remult.repo(User).findId(iid, {useCache : false})
+      if (!sc) throw `Inspector-Id '${iid}' NOT EXISTS`
+      title = `עדכון קבלן משנה ${sc.name}`
     }
     else {
-      t = this.remult.repo(User).create()
-      t.tenant = true
+      sc = this.remult.repo(User).create()
+      sc.subContractor = true
       title = 'הוספת קבלן משנה חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
         title: title,
-        ok: async () => { await t.save() },
+        ok: async () => { await sc.save() },
         fields: () => [
-          t.$.name,
-          t.$.mobile,
-          t.$.email]
+          sc.$.name,
+          sc.$.mobile,
+          sc.$.email]
       },
       ref => ref ? ref.ok : false)
     if (changed) {

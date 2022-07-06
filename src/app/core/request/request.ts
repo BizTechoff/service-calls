@@ -1,5 +1,6 @@
 import { Allow, Entity, Field, Fields, IdEntity } from "remult";
 import { User } from "../../users/user";
+import { RequestStatus } from "./requestStatus";
 
 @Entity('requests', (options, remult) => {
     options.caption = 'פנייה'
@@ -15,5 +16,8 @@ export class Request extends IdEntity {
 
     @Fields.string({ caption: 'שעת פנייה', inputType: 'time' })
     time = ''
+
+    @Field(() => RequestStatus)
+    status = RequestStatus.open
 
 }

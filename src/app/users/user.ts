@@ -139,7 +139,7 @@ export class User extends IdEntity {
     })
     @Fields.boolean({
         allowApiUpdate: Roles.admin,
-        caption: 'קבלן בינוי'
+        caption: terms.constructionContractor
     })
     constructionContractor = false;
 
@@ -159,6 +159,24 @@ export class User extends IdEntity {
         caption: 'מפקח'
     })
     inspector = false;
+
+    @DataControl<User, boolean>({
+        width: '88',
+        valueChange: (row, col) => {
+            if (col.value) {
+                row.admin = false
+                row.bedek = false
+                row.subContractor = false
+                row.tenant = false
+                row.inspector = false
+            }
+        }
+    })
+    @Fields.boolean({
+        allowApiUpdate: Roles.admin,
+        caption: terms.workManager
+    })
+    workManager = false;
 
     @DataControl<User, boolean>({
         width: '88',

@@ -34,6 +34,9 @@ import { TenantDetailsComponent } from './core/tenant/tenant-details/tenant-deta
 import { SubContractorsComponent } from './core/sub-contractor/sub-contractors/sub-contractors.component';
 import { InspectorsComponent } from './core/inspector/inspectors/inspectors.component';
 import { ConstructionContractorsComponent } from './core/construction-contractor/construction-contractors/construction-contractors.component';
+import { CurrentStateComponent } from './core/current-state/current-state.component';
+
+import { ChartsModule } from 'ng2-charts';
 
 @NgModule({
   declarations: [
@@ -52,7 +55,8 @@ import { ConstructionContractorsComponent } from './core/construction-contractor
     TenantDetailsComponent,
     SubContractorsComponent,
     InspectorsComponent,
-    ConstructionContractorsComponent
+    ConstructionContractorsComponent,
+    CurrentStateComponent
   ],
   imports: [
     BrowserModule,
@@ -70,7 +74,8 @@ import { ConstructionContractorsComponent } from './core/construction-contractor
     MatButtonModule,
     MatIconModule,
     MatMenuModule,
-    RemultModule
+    RemultModule,
+    ChartsModule  
   ],
   providers: [DialogService, AdminGuard, ManagerGuard, BedekGuard, SubContractorGuard, TenantGuard
     , AdminOrManagerGuard],

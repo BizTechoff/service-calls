@@ -88,7 +88,7 @@ export class RequestsComponent implements OnInit {
     let r!: Request
     let title = ''
     if (aid.length) {
-      r = await this.remult.repo(Request).findId(aid)
+      r = await this.remult.repo(Request).findId(aid, {useCache : false})
       if (!r) throw `Request-Id '${aid}' NOT EXISTS`
       title = `עדכון פנייה ${r.date}`
     }

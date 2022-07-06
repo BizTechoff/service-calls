@@ -19,10 +19,12 @@ import { TenantsComponent } from './core/tenant/tenants/tenants.component';
 import { InspectorsComponent } from './core/inspector/inspectors/inspectors.component';
 import { ConstructionContractorsComponent } from './core/construction-contractor/construction-contractors/construction-contractors.component';
 import { SubContractorsComponent } from './core/sub-contractor/sub-contractors/sub-contractors.component';
+import { CurrentStateComponent } from './core/current-state/current-state.component';
 
 const defaultRoute = terms.home;
 const routes: Routes = [
   { path: defaultRoute, component: HomeComponent, canActivate: [NotAuthenticatedGuard] },
+  { path: 'תמונת מצב', component: CurrentStateComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.projects, component: ProjectsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.tenants, component: TenantsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.requests, component: RequestsComponent, canActivate: [AdminOrManagerGuard] },

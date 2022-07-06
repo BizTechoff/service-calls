@@ -61,26 +61,26 @@ export class ConstructionContractorsComponent implements OnInit {
 
   async upsertConstructionContractor(iid = '') {
     if (!iid) iid = ''
-    let t!: User
+    let w!: User
     let title = ''
     if (iid.length) {
-      t = await this.remult.repo(User).findId(iid)
-      if (!t) throw `Inspector-Id '${iid}' NOT EXISTS`
-      title = `עדכון מנהל עבודה ${t.name}`
+      w = await this.remult.repo(User).findId(iid, {useCache : false})
+      if (!w) throw `Inspector-Id '${iid}' NOT EXISTS`
+      title = `עדכון מנהל עבודה ${w.name}`
     }
     else {
-      t = this.remult.repo(User).create()
-      t.tenant = true
+      w = this.remult.repo(User).create()
+      w.workManager = true
       title = 'הוספת מנהל עבודה חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
         title: title,
-        ok: async () => { await t.save() },
+        ok: async () => { await w.save() },
         fields: () => [
-          t.$.name,
-          t.$.mobile,
-          t.$.email]
+          w.$.name,
+          w.$.mobile,
+          w.$.email]
       },
       ref => ref ? ref.ok : false)
     if (changed) {

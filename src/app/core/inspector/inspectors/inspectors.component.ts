@@ -55,26 +55,26 @@ export class InspectorsComponent implements OnInit {
 
   async upsertInspector(iid = '') {
     if (!iid) iid = ''
-    let t!: User
+    let i!: User
     let title = ''
     if (iid.length) {
-      t = await this.remult.repo(User).findId(iid)
-      if (!t) throw `Inspector-Id '${iid}' NOT EXISTS`
-      title = `עדכון מפקח ${t.name}`
+      i = await this.remult.repo(User).findId(iid, {useCache : false})
+      if (!i) throw `Inspector-Id '${iid}' NOT EXISTS`
+      title = `עדכון מפקח ${i.name}`
     }
     else {
-      t = this.remult.repo(User).create()
-      t.tenant = true
+      i = this.remult.repo(User).create()
+      i.inspector = true
       title = 'הוספת מפקח חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
         title: title,
-        ok: async () => { await t.save() },
+        ok: async () => { await i.save() },
         fields: () => [
-          t.$.name,
-          t.$.mobile,
-          t.$.email]
+          i.$.name,
+          i.$.mobile,
+          i.$.email]
       },
       ref => ref ? ref.ok : false)
     if (changed) {

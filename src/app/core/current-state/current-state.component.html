@@ -1,0 +1,13 @@
+<div class="full-page">
+    <div class="header">
+        
+    </div>
+    <div class="grow-item">
+        <canvas baseChart [colors]="pieChartColors" [data]="pieChartDataStatuses"
+                    [labels]="pieChartLabelsStatuses" [chartType]="pieChartType" [options]="pieChartOptionsByStatuses"
+                    [plugins]="pieChartPlugins" [legend]="pieChartLegend"
+                    (chartClick)="chartClicked(this.filterBy.status, $event)">
+                </canvas>
+    </div>
+    <div class="footer"></div>
+</div>

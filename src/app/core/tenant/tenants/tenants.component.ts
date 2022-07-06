@@ -42,7 +42,7 @@ export class TenantsComponent implements OnInit {
       where: { tenant: true },
       numOfColumnsInGrid: 10,
       columnSettings: (row) => [
-        row.name,
+        { field: row.name, caption: 'שם דייר' },
         row.mobile,
         row.email
       ],
@@ -54,6 +54,12 @@ export class TenantsComponent implements OnInit {
         {
           click: async (row) => this.openRequests(row.id),
           showInLine: true
+        },
+        {
+          click: async (row) => this.openRequests(row.id),
+          showInLine: true,
+          icon:'edit',
+          textInMenu:'פרטי דייר'
         }
       ]
     })
@@ -64,7 +70,7 @@ export class TenantsComponent implements OnInit {
     let t!: User
     let title = ''
     if (tid.length) {
-      t = await this.remult.repo(User).findId(tid)
+      t = await this.remult.repo(User).findId(tid, {useCache : false})
       if (!t) throw `Tenant-Id '${tid}' NOT EXISTS`
       title = `עדכון דייר ${t.name}`
     }

@@ -101,7 +101,7 @@ export class ProjectsComponent implements OnInit {
     let p!: Project
     let title = ''
     if (pid.length) {
-      p = await this.remult.repo(Project).findId(pid)
+      p = await this.remult.repo(Project).findId(pid, {useCache : false})
       if (!p) throw `Project-Id '${pid}' NOT EXISTS`
       title = `עדכון פרויקט ${p.idNumber}`
     }

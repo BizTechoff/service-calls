@@ -101,7 +101,7 @@ export class ComplexesComponent implements OnInit {
     let c!: Complex
     let title = ''
     if (cid.length) {
-      c = await this.remult.repo(Complex).findId(cid)
+      c = await this.remult.repo(Complex).findId(cid, {useCache : false})
       if (!c) throw `Request-Id '${cid}' NOT EXISTS`
       title = `עדכון מתחם ${c.name}`
     }

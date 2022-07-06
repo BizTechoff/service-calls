@@ -53,6 +53,7 @@ export class UsersComponent implements OnInit {
       users.bedekManager,
       users.bedek,
       users.inspector,
+      users.workManager,
       users.constructionContractor,
       users.subContractor,
       users.tenant
@@ -84,7 +85,7 @@ export class UsersComponent implements OnInit {
     let u!: User
     let title = ''
     if (uid.length) {
-      u = await this.remult.repo(User).findId(uid)
+      u = await this.remult.repo(User).findId(uid, {useCache : false})
       if (!u) throw `Project-Id '${uid}' NOT EXISTS`
       title = `עדכון משתמש ${u.name}`
     }
