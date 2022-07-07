@@ -246,7 +246,14 @@ export class RequestsComponent implements OnInit {
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
+        disableClose: true,
         title: title,
+        buttons: [
+          {
+            text: 'קבצים',
+            click: async () => await this.openFiles(r?.apartment?.id)
+          }
+        ],
         ok: async () => { await r.save() },
         fields: () => [
           [
@@ -262,12 +269,32 @@ export class RequestsComponent implements OnInit {
             { field: r.$.date, width: '100%' },
             { field: r.$.time, width: '100%' }
           ],
-          r.$.description]
+          r.$.description,
+          [
+            { field: r.$.workManager, width: '100%' },
+            { field: r.$.subContractor, width: '100%' }
+          ],
+          [
+            { field: r.$.workerCount, width: '100%' },
+            { field: r.$.workHours, width: '100%' }
+          ],
+          r.$.workDescription
+        ]
       },
       ref => ref ? ref.ok : false)
     if (changed) {
       this.refresh()
     }
+  }
+
+  async openFiles(tid: string) {
+
+    // const changed = await openDialog(InputAreaComponent,
+    //   ref => ref.args = {
+    //     title: 'בחירת קבצי דירה',
+    //     ok: () => { }
+    //   },
+    //   ref => ref ? ref.ok : false)
   }
 
   async openBuildingManagers(rid = '') {

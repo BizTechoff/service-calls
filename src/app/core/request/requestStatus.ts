@@ -7,4 +7,5 @@ export class RequestStatus {
     static close = new RequestStatus('סגור')
     constructor(public caption = '') { }
     id!: string
+    isClose() { return this?.id === RequestStatus.close?.id }
 }

@@ -1,5 +1,5 @@
 import { DataControl } from "@remult/angular/interfaces";
-import { Allow, Entity, Field, Fields, IdEntity } from "remult";
+import { Allow, Entity, Field, Fields, IdEntity, isBackend } from "remult";
 import { terms } from "../../terms";
 import { User } from "../../users/user";
 import { Apartment } from "../apartment/apartment";
@@ -10,9 +10,21 @@ import { Category } from "./category";
 import { RequestStatus } from "./requestStatus";
 import { Space } from "./spaces";
 
-@Entity('requests', (options, remult) => {
+@Entity<Request>('requests', (options, remult) => {
     options.caption = 'פנייה'
     options.allowApiCrud = Allow.authenticated
+    options.validation = async row => {
+        if (isBackend()) {
+            if (row.status.isClose()) {
+                if (row.workHours < 1) {
+                    row._.error = 'מינימום שעה'
+                }
+                if (row.workerCount < 1) {
+                    row._.error = 'מינימום אחד'
+                }
+            }
+        }
+    }
 })
 export class Request extends IdEntity {
 
@@ -110,5 +122,21 @@ export class Request extends IdEntity {
         }
     })
     description = ''
+
+    @Fields.number({ caption: 'מס.עובדים' })
+    workerCount = 0
+
+    @Fields.number({ caption: 'מס.שעות' })
+    workHours = 0
+
+    @Fields.string({
+        caption: 'תיאור הטיפול',
+        validate: (row, col) => {
+            if (!col?.value) {
+                col.error = terms.requiredField
+            }
+        }
+    })
+    workDescription = ''
 
 }
