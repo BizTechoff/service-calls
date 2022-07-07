@@ -1,11 +1,21 @@
-import { Allow, Entity, Field, Fields, IdEntity } from "remult";
+import { Allow, Entity, Field, Fields, IdEntity, isBackend } from "remult";
+import { terms } from "../../terms";
 import { User } from "../../users/user";
 import { Building } from "../building/building";
-import { Project } from "../project/project";
 
-@Entity('apartments', (options, remult) => {
+@Entity<Apartment>('apartments', (options, remult) => {
     options.caption = 'בניין'
     options.allowApiCrud = Allow.authenticated
+    options.deleting = async (row) => {
+        if (isBackend()) {
+            if (row.isPublic()) {
+                let count = await remult.repo(Apartment).count({ building: row.building })
+                if (count > 1) {
+                    throw 'לא ניתן למחוק קבוצה ציבורית'
+                }//todo: if create new apartment for current building need created public again
+            }
+        }
+    }
 })
 export class Apartment extends IdEntity {
 
@@ -26,5 +36,9 @@ export class Apartment extends IdEntity {
 
     @Fields.string({ caption: 'שם פנימי' })
     innerName = ''
+
+    isPublic() {
+        return this.innerName?.trim() === terms.public
+    }
 
 }
