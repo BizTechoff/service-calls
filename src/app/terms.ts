@@ -1,6 +1,6 @@
 export const terms = {
     appName: 'מנהיגות תורנית',
-    appVersion: '2022.07.06.2',
+    appVersion: '2022.07.07.0',
     name: 'שם',
     requiredField: 'חובה',
     uniqueField:'קיים',
