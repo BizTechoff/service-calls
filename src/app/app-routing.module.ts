@@ -20,6 +20,7 @@ import { InspectorsComponent } from './core/inspector/inspectors/inspectors.comp
 import { ConstructionContractorsComponent } from './core/construction-contractor/construction-contractors/construction-contractors.component';
 import { SubContractorsComponent } from './core/sub-contractor/sub-contractors/sub-contractors.component';
 import { CurrentStateComponent } from './core/current-state/current-state.component';
+import { WorkManagersComponent } from './core/work-manager/work-managers/work-managers.component';
 
 const defaultRoute = terms.home;
 const routes: Routes = [
@@ -32,7 +33,7 @@ const routes: Routes = [
   { path: terms.buildings, component: BuildingsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.apartments, component: ApartmentsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.inspectors, component: InspectorsComponent, canActivate: [AdminOrManagerGuard] },
-  { path: terms.workManager, component: ConstructionContractorsComponent, canActivate: [AdminOrManagerGuard] },
+  { path: terms.workManager, component: WorkManagersComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.subContractors, component: SubContractorsComponent, canActivate: [AdminOrManagerGuard] },
   { path: terms.reports, component: UsersComponent, canActivate: [AdminOrManagerGuard] },
   // { path: terms.tenants, component: UsersComponent, canActivate: [AdminOrManagerGuard] },

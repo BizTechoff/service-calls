@@ -21,7 +21,8 @@ export class ApartmentsComponent implements OnInit {
     pid?: string,
     cid?: string,
     bid?: string,
-    aid?: string
+    aid?: string,
+    tid?: string
   } = { pid: '', cid: '', bid: '', aid: '' }
   apartments!: GridSettings<Apartment>
   constructor(private remult: Remult) { }

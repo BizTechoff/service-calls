@@ -13,11 +13,12 @@ import { User } from '../../../users/user';
 export class ConstructionContractorsComponent implements OnInit {
 
   args: {
-    pid?:string,
+    pid?: string,
     cid?: string,
     bid?: string,
-    aid?: string
-  } = { pid:'', cid: '' }
+    aid?: string,
+    tid?: string
+  } = { pid: '', cid: '' }
   tenants!: GridSettings<User>
   constructor(private remult: Remult) { }
 
@@ -39,12 +40,13 @@ export class ConstructionContractorsComponent implements OnInit {
 
   async initGrid() {
     this.tenants = new GridSettings<User>(this.remult.repo(User), {
-      where: { constructionContractor: true },
+      where: { workManager: true },
       numOfColumnsInGrid: 10,
       columnSettings: (row) => [
-        row.name,
+        { field: row.name, caption: 'שם מנהל' },
         row.mobile,
-        row.email
+        row.email//,
+        // row.category
       ],
       rowButtons: [
         {
@@ -64,7 +66,7 @@ export class ConstructionContractorsComponent implements OnInit {
     let w!: User
     let title = ''
     if (iid.length) {
-      w = await this.remult.repo(User).findId(iid, {useCache : false})
+      w = await this.remult.repo(User).findId(iid, { useCache: false })
       if (!w) throw `Inspector-Id '${iid}' NOT EXISTS`
       title = `עדכון מנהל עבודה ${w.name}`
     }
@@ -78,9 +80,11 @@ export class ConstructionContractorsComponent implements OnInit {
         title: title,
         ok: async () => { await w.save() },
         fields: () => [
-          w.$.name,
+          { field: w.$.name, caption: 'שם מנהל' },
           w.$.mobile,
-          w.$.email]
+          w.$.email//,
+          //w.$.category
+        ]
       },
       ref => ref ? ref.ok : false)
     if (changed) {

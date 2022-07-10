@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { openDialog } from '@remult/angular';
 import { DataControl, GridSettings } from '@remult/angular/interfaces';
 import { Field, Fields, getFields, Remult } from 'remult';
+import { DialogService } from '../../../common/dialog';
 import { InputAreaComponent } from '../../../common/input-area/input-area.component';
 import { User } from '../../../users/user';
+import { Apartment } from '../../apartment/apartment';
 import { ApartmentsComponent } from '../../apartment/apartments/apartments.component';
 import { Building } from '../../building/building';
 import { BuildingsComponent } from '../../building/buildings/buildings.component';
@@ -24,6 +26,8 @@ import { RequestStatus } from '../requestStatus';
 })
 export class RequestsComponent implements OnInit {
 
+  NUM_OF_APARTMENTS_IN_FLOOR = 4
+
   args: {
     pid?: string,
     cid?: string,
@@ -36,7 +40,7 @@ export class RequestsComponent implements OnInit {
     status?: RequestStatus
   } = { pid: '', cid: '', bid: '', aid: '', tid: '', wid: '', sid: '' }
   requests!: GridSettings<Request>
-  constructor(private remult: Remult) { }
+  constructor(private remult: Remult, private dialog: DialogService) { }
   get $() { return getFields(this, this.remult) };
 
   @DataControl<RequestsComponent>({
@@ -51,7 +55,7 @@ export class RequestsComponent implements OnInit {
     hideDataOnInput: true,
     click: async row => await row?.openProjects()
   })
-  @Fields.string({ caption: 'בחירת פרויקט' })
+  @Field<RequestsComponent, Project>(() => Project, { caption: 'בחירת פרויקט' })
   project!: Project//customSearch
 
   @DataControl<RequestsComponent, Complex>({
@@ -60,7 +64,7 @@ export class RequestsComponent implements OnInit {
     hideDataOnInput: true,
     click: async row => await row?.openComplexes()
   })
-  @Fields.string({ caption: 'בחירת מתחם' })
+  @Field<RequestsComponent, Complex>(() => Complex, { caption: 'בחירת מתחם' })
   complex!: Complex//customSearch
 
   @DataControl<RequestsComponent, Building>({
@@ -69,7 +73,7 @@ export class RequestsComponent implements OnInit {
     hideDataOnInput: true,
     click: async row => await row?.openBuildings()
   })
-  @Fields.string({ caption: 'בחירת בניין' })
+  @Field<RequestsComponent, Building>(() => Building, { caption: 'בחירת בניין' })
   building!: Building//customSearch
 
   @DataControl<RequestsComponent, User>({
@@ -78,7 +82,10 @@ export class RequestsComponent implements OnInit {
     hideDataOnInput: true,
     click: async row => await row?.openTenants()
   })
-  @Fields.string({ caption: 'בחירת דייר' })
+  @Field<RequestsComponent, User>(() => User, (options, remult) => {
+    options.caption = 'בחירת דייר'
+    options.displayValue = (row, col) => col?.$.name?.value
+  })
   tenant!: User//customSearch
 
   @DataControl<RequestsComponent, Project>({
@@ -87,7 +94,7 @@ export class RequestsComponent implements OnInit {
     hideDataOnInput: true,
     click: async row => await row?.openBuildingManagers()
   })
-  @Fields.string({ caption: 'בחירת מנהל עבודה' })
+  @Field<RequestsComponent, User>(() => User, { caption: 'בחירת מנהל עבודה' })
   workManager!: User//customSearch
 
   @DataControl<RequestsComponent, Project>({
@@ -96,7 +103,7 @@ export class RequestsComponent implements OnInit {
     hideDataOnInput: true,
     click: async row => await row?.openSubContractor()
   })
-  @Fields.string({ caption: 'בחירת קבלן משנה' })
+  @Field<RequestsComponent, User>(() => User, { caption: 'בחירת קבלן משנה' })
   subContractor!: User//customSearch
 
   @DataControl<RequestsComponent, RequestStatus>({
@@ -104,7 +111,7 @@ export class RequestsComponent implements OnInit {
     // clickIcon: 'search',
     // click: async (row, col) => { }
   })
-  @Field(() => RequestStatus, { caption: 'בחירת סטטוס' })
+  @Field<RequestsComponent, RequestStatus>(() => RequestStatus, { caption: 'בחירת סטטוס' })
   status!: RequestStatus//customSearch
 
   @DataControl<RequestsComponent, Category>({
@@ -112,25 +119,32 @@ export class RequestsComponent implements OnInit {
     // clickIcon: 'search',
     // click: async (row, col) => { }
   })
-  @Field(() => Category, { caption: 'בחירת מחלקה' })
+  @Field<RequestsComponent, Category>(() => Category, { caption: 'בחירת מחלקה' })
   category!: Category//customSearch
 
   async ngOnInit() {
+    console.log(1)
     if (this.args.pid?.trim().length) {
       this.project = await this.remult.repo(Project).findId(this.args.pid)
     }
+    console.log(2)
     if (this.args.cid?.trim().length) {
+      console.log(21)
       this.complex = await this.remult.repo(Complex).findId(this.args.cid)
+      console.log(22)
     }
+    console.log(3)
     if (this.args.bid?.trim().length) {
       this.building = await this.remult.repo(Building).findId(this.args.bid)
     }
     // if (this.args.aid?.trim().length) {
     //   this.apartment = await this.remult.repo(Apartment).findId(this.args.aid)
     // }
+    console.log(4)
     if (this.args.tid?.trim().length) {
       this.tenant = await this.remult.repo(User).findId(this.args.tid)
     }
+    console.log(5)
     if (this.args.wid?.trim().length) {
       this.workManager = await this.remult.repo(User).findId(this.args.wid)
     }
@@ -177,43 +191,43 @@ export class RequestsComponent implements OnInit {
       }],
       rowButtons: [
         {//border_outer: project
-          click: async (row) => this.openBuildingManagers(row.id),
+          click: async row => await this.openBuildingManagers(row?.workManager?.id),
           showInLine: true,
           textInMenu: 'מנהלי עבודה',
           icon: 'engineering'
         },
         {
-          click: async (row) => this.openProjects(row.id),
+          click: async row => await this.openProjects(row?.project?.id),
           showInLine: true,
           textInMenu: 'פרויקטים',
           icon: 'confirmation_number'
         },
         {
-          click: async (row) => this.openComplexes(row.id),
+          click: async row => await this.openComplexes(row?.complex?.id),
           showInLine: true,
           textInMenu: 'מתחמים',
           icon: 'workspaces'
         },
         {
-          click: async (row) => this.openBuildings(row.id),
+          click: async row => await this.openBuildings(row?.building?.id),
           showInLine: true,
           textInMenu: 'בניינים',
           icon: 'location_city'
         },
         {
-          click: async (row) => this.openApartments(row.id),
+          click: async row => await this.openApartments(row?.apartment?.id),
           showInLine: true,
           textInMenu: 'דירות',
           icon: 'house'
         },
         {
-          click: async (row) => this.openTenants(row.id),
+          click: async row => await this.openTenants(row?.tenant?.id),
           showInLine: true,
           textInMenu: 'דיירים',
           icon: 'groups'
         },
         {
-          click: async (row) => this.upserRequest(row.id),
+          click: async row => await this.upserRequest(row.id),
           showInLine: true,
           textInMenu: 'פרטי פנייה',
           icon: 'edit'
@@ -242,18 +256,39 @@ export class RequestsComponent implements OnInit {
       r.subContractor = this.subContractor
       r.date = new Date()
       r.time = new Date().getTime() + ''
-      title = 'הוספת פנייה חדשה'
+      title = 'פתיחת פנייה חדשה'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
-        disableClose: true,
+        disableClose: () => r._.wasChanged(),
         title: title,
-        buttons: [
-          {
-            text: 'קבצים',
-            click: async () => await this.openFiles(r?.apartment?.id)
-          }
-        ],
+        buttons:
+
+          r.isNew()
+            ? [{
+              text: 'קבצים',
+              click: async () => await this.openFiles(r?.apartment?.id)
+            }]
+            : [{
+              text: 'קבצים',
+              click: async () => await this.openFiles(r?.apartment?.id)
+            },
+            {
+              text: 'סגירת פנייה',
+              click: async () => await this.openFiles(r?.apartment?.id)
+            },
+            {
+              text: 'שיבוץ מטפל',
+              click: async () => await this.openFiles(r?.apartment?.id)
+            },
+            {
+              text: 'דירה מעליו',
+              click: async () => await this.openApartmentAbove(r?.apartment?.id)
+            },
+            {
+              text: 'דירה מתחתיו',
+              click: async () => await this.openApartmentBelow(r?.apartment?.id)
+            }],
         ok: async () => { await r.save() },
         fields: () => [
           [
@@ -262,14 +297,17 @@ export class RequestsComponent implements OnInit {
             r.$.building,
             r.$.apartment,
             r.$.tenant,
-            r.$.category,
             r.$.status
           ],
           [
             { field: r.$.date, width: '100%' },
             { field: r.$.time, width: '100%' }
           ],
-          r.$.description,
+          [
+            r.$.category,
+            r.$.space,
+            r.$.description
+          ],
           [
             { field: r.$.workManager, width: '100%' },
             { field: r.$.subContractor, width: '100%' }
@@ -281,9 +319,55 @@ export class RequestsComponent implements OnInit {
           r.$.workDescription
         ]
       },
-      ref => ref ? ref.ok : false)
+      ref => ref?.ok ?? false)
     if (changed) {
       this.refresh()
+    }
+  }
+
+  async openApartmentAbove(aid: string) {
+    if (!aid) aid = ''
+    if (aid.length) {
+      let a = await this.remult.repo(Apartment).findId(aid, { useCache: false })
+      if (!a) throw `openApartmentAbove( aid:${aid} ) NOT EXISTS`
+      let above = await this.remult.repo(Apartment).findFirst({
+        building: a.building,
+        floor: a.floor + 1,
+        number: a.number + this.NUM_OF_APARTMENTS_IN_FLOOR
+      })
+      if (!above) {
+        this.dialog.info("הדייר בקומה הכי עליונה")
+      }
+      else {
+        await openDialog(ApartmentsComponent,
+          ref => ref.args = { aid: above.id })
+      }
+    }
+    else {
+      this.dialog.info("openApartmentAbove(aid: '${aid}' NOT VALID")
+    }
+  }
+
+  async openApartmentBelow(aid: string) {
+    if (!aid) aid = ''
+    if (aid.length) {
+      let a = await this.remult.repo(Apartment).findId(aid, { useCache: false })
+      if (!a) throw `openApartmentBelow( aid:${aid} ) NOT EXISTS`
+      let below = await this.remult.repo(Apartment).findFirst({
+        building: a.building,
+        floor: a.floor - 1,
+        number: a.number - this.NUM_OF_APARTMENTS_IN_FLOOR
+      })
+      if (!below) {
+        this.dialog.info("הדייר בקומה הכי תחתונה")
+      }
+      else {
+        await openDialog(ApartmentsComponent,
+          ref => ref.args = { aid: below.id })
+      }
+    }
+    else {
+      this.dialog.info("openApartmentBelow(aid: '${aid}' NOT VALID")
     }
   }
 
@@ -301,8 +385,14 @@ export class RequestsComponent implements OnInit {
     await openDialog(ConstructionContractorsComponent);
   }
 
-  async openProjects(rid = '') {
-    await openDialog(ProjectsComponent);
+  async openProjects(pid = '') {
+    if (!pid) pid = ''
+    if (pid.length) {
+      let p = await this.remult.repo(Project).findId(pid, { useCache: false })
+      if (!p) throw `Project id ${pid} NOT EXISTS`
+      await openDialog(ProjectsComponent,
+        ref => ref.args = { pid: pid });
+    }
   }
 
   async openBuildings(rid = '') {
@@ -323,6 +413,22 @@ export class RequestsComponent implements OnInit {
 
   async openSubContractor(rid = '') {
     await openDialog(SubContractorsComponent);
+  }
+
+  async cleanParams() {
+    let yes = await this.dialog.yesNoQuestion('לנקות את הערכים של הסינון?')
+    if (yes) {
+      this.project = undefined!
+      this.complex = undefined!
+      this.building = undefined!
+      this.tenant = undefined!
+      this.workManager = undefined!
+      this.subContractor = undefined!
+      this.category = undefined!
+      this.status = undefined!
+      this.dialog.info('ערכים נוקו')
+      this.refresh()
+    }
   }
 
 }

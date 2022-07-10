@@ -1,6 +1,7 @@
 import { DataControl } from "@remult/angular/interfaces";
-import { Allow, BackendMethod, Entity, Fields, IdEntity, isBackend, Validators } from "remult";
+import { Allow, BackendMethod, Entity, Field, Fields, IdEntity, isBackend, Validators } from "remult";
 import { mobileFromDb, mobileToDb } from "../common/utils";
+import { Category } from "../core/request/category";
 import { terms } from "../terms";
 import { Roles } from './roles';
 
@@ -35,9 +36,9 @@ import { Roles } from './roles';
 export class User extends IdEntity {
 
     @DataControl<User, string>({ width: '118' })
-    @Fields.string({
-        validate: [Validators.required],
-        caption: terms.username
+    @Fields.string<User>((options, remult) => {
+        options.validate = [Validators.required]
+        options.caption = terms.username
     })
     name = '';
 
@@ -67,6 +68,19 @@ export class User extends IdEntity {
     })
     createDate = new Date();
 
+    @Field<User, Category>(() => Category, (options, remult) => {
+        // options.allowApiUpdate = false
+        options.caption = 'מחלקה'
+        options.validate = (row, col) => {
+            if (row.subContractor) {
+                if (!col?.value) {
+                    col.error = terms.requiredField
+                }
+            }
+        }
+    })
+    category!: Category
+
     @DataControl<User, boolean>({
         width: '88',
         valueChange: (row, col) => {
@@ -77,7 +91,7 @@ export class User extends IdEntity {
                 row.constructionContractor = false
                 row.subContractor = false
                 row.tenant = false
-            } 
+            }
         }
     })
     @Fields.boolean({

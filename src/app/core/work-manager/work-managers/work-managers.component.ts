@@ -6,21 +6,27 @@ import { InputAreaComponent } from '../../../common/input-area/input-area.compon
 import { User } from '../../../users/user';
 
 @Component({
-  selector: 'app-inspectors',
-  templateUrl: './inspectors.component.html',
-  styleUrls: ['./inspectors.component.scss']
+  selector: 'app-work-managers',
+  templateUrl: './work-managers.component.html',
+  styleUrls: ['./work-managers.component.scss']
 })
-export class InspectorsComponent implements OnInit {
+export class WorkManagersComponent implements OnInit {
 
+  args: {
+    pid?: string,
+    cid?: string,
+    bid?: string,
+    aid?: string
+  } = { pid: '', cid: '' }
   tenants!: GridSettings<User>
   constructor(private remult: Remult) { }
 
   get $() { return getFields(this, this.remult) };
 
-  @DataControl<InspectorsComponent>({
+  @DataControl<WorkManagersComponent>({
     valueChange: async (row, col) => await row?.refresh()
   })
-  @Fields.string({ caption: 'חיפוש מפקח' })
+  @Fields.string({ caption: 'חיפוש מנהל עבודה' })
   search = ''//customSearch
 
   async ngOnInit() {
@@ -33,12 +39,13 @@ export class InspectorsComponent implements OnInit {
 
   async initGrid() {
     this.tenants = new GridSettings<User>(this.remult.repo(User), {
-      where: { inspector: true },
+      where: { workManager: true },
       numOfColumnsInGrid: 10,
       columnSettings: (row) => [
-        { field: row.name, caption: 'שם מפקח' },
+        { field: row.name, caption: 'שם מנהל עבודה' },
         row.mobile,
-        row.email
+        row.email//,
+        // row.category
       ],
       rowButtons: [
         {
@@ -53,28 +60,30 @@ export class InspectorsComponent implements OnInit {
     })
   }
 
-  async upsertInspector(iid = '') {
+  async upsertConstructionContractor(iid = '') {
     if (!iid) iid = ''
-    let i!: User
+    let w!: User
     let title = ''
     if (iid.length) {
-      i = await this.remult.repo(User).findId(iid, {useCache : false})
-      if (!i) throw `Inspector-Id '${iid}' NOT EXISTS`
-      title = `עדכון מפקח ${i.name}`
+      w = await this.remult.repo(User).findId(iid, { useCache: false })
+      if (!w) throw `Inspector-Id '${iid}' NOT EXISTS`
+      title = `עדכון מנהל עבודה ${w.name}`
     }
     else {
-      i = this.remult.repo(User).create()
-      i.inspector = true
-      title = 'הוספת מפקח חדש'
+      w = this.remult.repo(User).create()
+      w.workManager = true
+      title = 'הוספת מנהל עבודה חדש'
     }
     const changed = await openDialog(InputAreaComponent,
       ref => ref.args = {
         title: title,
-        ok: async () => { await i.save() },
+        ok: async () => { await w.save() },
         fields: () => [
-          i.$.name,
-          i.$.mobile,
-          i.$.email]
+          { field: w.$.name, caption: 'שם מנהל עבודה' },
+          w.$.mobile,
+          w.$.email//,
+          //w.$.category
+        ]
       },
       ref => ref ? ref.ok : false)
     if (changed) {

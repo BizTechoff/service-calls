@@ -22,17 +22,20 @@ export class Apartment extends IdEntity {
     // @Field(() => Project, { caption: 'פרויקט' })
     // project!: Project
 
-    @Field(() => Building, { caption: 'בניין' })
+    @Field<Apartment, Building>(() => Building, {
+        caption: 'בניין',
+        displayValue: (row, col) => col?.$.name?.value
+    })
     building!: Building
 
     @Field(() => User, { caption: 'דייר' })
     tenant?: User
 
-    @Fields.string({ caption: 'מס. דירה' })
-    number = ''
+    @Fields.number({ caption: 'מס. דירה' })
+    number = 0
 
     @Fields.number({ caption: 'קומה' })
-    floor = ''
+    floor = 0
 
     @Fields.string({ caption: 'שם פנימי' })
     innerName = ''

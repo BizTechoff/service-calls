@@ -44,6 +44,7 @@ export class ProjectsComponent implements OnInit {
 
   async initGrid() {
     this.projects = new GridSettings<Project>(this.remult.repo(Project), {
+      where: this.args.pid?.length ? { id: this.args.pid } : undefined,
       gridButtons: [{
         icon: 'refresh',
         textInMenu: () => 'רענן',
@@ -101,7 +102,7 @@ export class ProjectsComponent implements OnInit {
     let p!: Project
     let title = ''
     if (pid.length) {
-      p = await this.remult.repo(Project).findId(pid, {useCache : false})
+      p = await this.remult.repo(Project).findId(pid, { useCache: false })
       if (!p) throw `Project-Id '${pid}' NOT EXISTS`
       title = `עדכון פרויקט ${p.idNumber}`
     }

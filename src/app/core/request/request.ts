@@ -25,6 +25,18 @@ import { Space } from "./spaces";
             }
         }
     }
+    options.backendPrefilter = () => // if removing this line? '()=>', call only once? every refresh?
+        remult.user.isAdmin || remult.user.isBedek || remult.user.isBedekManager
+            ? {}
+            : remult.user.isBuildingManager
+                ? { $or: [{ workManager: { $id: remult.user.id } }] }
+                : remult.user.isInspector
+                    ? { $or: [{ inspector: { $id: remult.user.id } }] }
+                    : remult.user.isProfessional
+                        ? { $or: [{ professional: { $id: remult.user.id } }] }
+                        : remult.user.isTenant
+                            ? { $or: [{ tenant: { $id: remult.user.id } }] }
+                            : { id: remult.user.id }// need id$ ? whats diff ?
 })
 export class Request extends IdEntity {
 
@@ -64,6 +76,10 @@ export class Request extends IdEntity {
         }
     })
     apartment!: Apartment
+    @Field(() => User, { caption: 'מפקח' })
+    inspector!: User
+    @Field(() => User, { caption: 'מומחה' })
+    professional!: User
     @Field(() => User, { caption: 'מנהל עבודה' })
     workManager!: User
     @Field(() => User, { caption: 'קבלן משנה' })
@@ -114,7 +130,7 @@ export class Request extends IdEntity {
     status = RequestStatus.open
 
     @Fields.string({
-        caption: 'תיאור',
+        caption: 'תיאור הליקוי',
         validate: (row, col) => {
             if (!col?.value) {
                 col.error = terms.requiredField
@@ -124,10 +140,10 @@ export class Request extends IdEntity {
     description = ''
 
     @Fields.number({ caption: 'מס.עובדים' })
-    workerCount = 0
+    workerCount!:number// = 0
 
     @Fields.number({ caption: 'מס.שעות' })
-    workHours = 0
+    workHours!:number// = 0
 
     @Fields.string({
         caption: 'תיאור הטיפול',

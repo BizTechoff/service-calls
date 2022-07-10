@@ -2,49 +2,68 @@
     <div class="header">
         <div style="display: flex; flex-direction: column; justify-content: space-between; ">
 
-            <fieldset style="border-radius: 5px; border: none;">
+            <fieldset style="border-radius: 5px; border: 2px;">
                 <!-- <legend>סינון רשימה</legend> -->
                 <div style="display: flex; flex-direction: row; justify-content: space-between; ">
-                    <div style="width: 100%; margin: 5px;">
-                        <data-control [field]='this.$.project'></data-control>
+
+                    <div style="width: 100%; display: flex; flex-direction: column; justify-content: space-between; ">
+
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; ">
+                            <div style="width: 100%; margin: 5px;">
+                                <data-control [field]='this.$.project'></data-control>
+                            </div>
+                            <div style="width: 100%; margin: 5px;">
+                                <data-control [field]='this.$.complex'></data-control>
+                            </div>
+                            <div style="width: 100%; margin: 5px;">
+                                <data-control [field]='this.$.building'></data-control>
+                            </div>
+                            <div style="width: 100%; margin: 5px;">
+                                <data-control [field]='this.$.tenant'></data-control>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: row; justify-content: space-between; ">
+                            <div style="width: 100%; margin: 0px 5px">
+                                <data-control [field]='this.$.workManager'></data-control>
+                            </div>
+                            <div style="width: 100%; margin: 0px 5px">
+                                <data-control [field]='this.$.subContractor'></data-control>
+                            </div>
+                            <div style="width: 100%; margin: 0px 5px">
+                                <!-- <span> {{ this.$.category.value?.caption }} </span> -->
+                                <data-control [field]='this.$.category'></data-control>
+                            </div>
+                            <div style="width: 100%; margin: 0px 5px">
+                                <data-control [field]='this.$.status'></data-control>
+                            </div>
+                        </div>
+
                     </div>
-                    <div style="width: 100%; margin: 5px;">
-                        <data-control [field]='this.$.complex'></data-control>
+
+                    <div style="align-items: center; display: flex; flex-direction: row; justify-content: space-between; ">
+                        <div style="margin: 0px 5px">
+                            <button mat-icon-button color="primary" (click)="this.cleanParams()" title="נקה ערכים שנבחרו">
+                                <mat-icon style="transform: rotate(180deg)">backspace</mat-icon>
+                            </button>
+                        </div>
                     </div>
-                    <div style="width: 100%; margin: 5px;">
-                        <data-control [field]='this.$.building'></data-control>
-                    </div>
-                    <div style="width: 100%; margin: 5px;">
-                        <data-control [field]='this.$.tenant'></data-control>
-                    </div>
+
                 </div>
-                <div style="display: flex; flex-direction: row; justify-content: space-between; ">
-                    <div style="width: 100%; margin: 0px 5px">
-                        <data-control [field]='this.$.workManager'></data-control>
-                    </div>
-                    <div style="width: 100%; margin: 0px 5px">
-                        <data-control [field]='this.$.subContractor'></data-control>
-                    </div>
-                    <div style="width: 100%; margin: 0px 5px">
-                        <span> {{ this.$.category.value?.caption }} </span>
-                        <data-control [field]='this.$.category'></data-control>
-                    </div>
-                    <div style="width: 100%; margin: 0px 5px">
-                        <data-control [field]='this.$.status'></data-control>
-                    </div>
-                </div>
-            </fieldset>
-            <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; ">
+
+                <!-- <div style="display: flex; flex-direction: row; justify-content: space-between; ">
                 <div style="width: 100%;">
                     <data-control [field]='this.$.search'></data-control>
                 </div>
             </div> -->
-            <div style="display: flex; flex-direction: row; justify-content: space-between; ">
-                <button style="width: 100%;" mat-raised-button color='primary' (click)="upserRequest()">
-                    <mat-icon>add</mat-icon>
-                    <mat-label> {{ 'הוספת פנייה חדשה' }} </mat-label>
-                </button>
-            </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between; ">
+                    <button style="width: 100%; margin: 0px 5px" mat-raised-button color='primary'
+                        (click)="upserRequest()">
+                        <mat-icon>add</mat-icon>
+                        <mat-label> {{ 'פתיחת פנייה חדשה' }} </mat-label>
+                    </button>
+                </div>
+            </fieldset>
         </div>
     </div>
     <div class="grow-item">

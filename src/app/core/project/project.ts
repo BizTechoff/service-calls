@@ -1,7 +1,7 @@
 import { Allow, Entity, Fields, IdEntity, Validators } from "remult";
 import { terms } from "../../terms";
 
-@Entity('projects', (options, remult) => {
+@Entity<Project>('projects', (options, remult) => {
     options.caption = 'פרויקט'
     options.allowApiCrud = Allow.authenticated
 })

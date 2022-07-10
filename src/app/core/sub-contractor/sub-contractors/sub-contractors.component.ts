@@ -36,7 +36,8 @@ export class SubContractorsComponent implements OnInit {
       where: { subContractor: true },
       numOfColumnsInGrid: 10,
       columnSettings: (row) => [
-        row.name,
+        { field: row.name, caption: 'שם קבלן משנה' },
+        row.category,
         row.mobile,
         row.email
       ],
@@ -58,7 +59,7 @@ export class SubContractorsComponent implements OnInit {
     let sc!: User
     let title = ''
     if (iid.length) {
-      sc = await this.remult.repo(User).findId(iid, {useCache : false})
+      sc = await this.remult.repo(User).findId(iid, { useCache: false })
       if (!sc) throw `Inspector-Id '${iid}' NOT EXISTS`
       title = `עדכון קבלן משנה ${sc.name}`
     }
@@ -72,9 +73,10 @@ export class SubContractorsComponent implements OnInit {
         title: title,
         ok: async () => { await sc.save() },
         fields: () => [
-          sc.$.name,
+          { field: sc.$.name, caption: 'שם קבלן משנה' },
+          sc.$.category,
           sc.$.mobile,
-          sc.$.email]
+          sc.$.email,]
       },
       ref => ref ? ref.ok : false)
     if (changed) {

@@ -1,7 +1,7 @@
 import { Allow, Entity, Field, Fields, IdEntity } from "remult";
 import { Project } from "../project/project";
 
-@Entity('complexes', (options, remult) => {
+@Entity<Complex>('complexes', (options, remult) => {
     options.caption = 'מתחם'
     options.allowApiCrud = Allow.authenticated
 })

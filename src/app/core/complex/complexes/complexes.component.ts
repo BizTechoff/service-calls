@@ -21,7 +21,8 @@ export class ComplexesComponent implements OnInit {
     pid?: string,
     cid?: string,
     bid?: string,
-    aid?: string
+    aid?: string,
+    tid?: string
   } = { pid: '', cid: '', bid: '', aid: '' }
   complexes!: GridSettings<Complex>
   constructor(private remult: Remult) { }
