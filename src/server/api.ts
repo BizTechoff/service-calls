@@ -7,6 +7,7 @@ import { Complex } from '../app/core/complex/complex';
 import { PhoneCall } from '../app/core/phone-call/phoneCall';
 import { Project } from '../app/core/project/project';
 import { Request } from '../app/core/request/request';
+import { RequestHistory } from '../app/core/request/requestHistory';
 import { SignInController } from '../app/users/SignInController';
 import { UpdatePasswordController } from '../app/users/UpdatePasswordController';
 import { User } from '../app/users/user';
@@ -14,7 +15,7 @@ import { User } from '../app/users/user';
 config()
 
 export const api = remultExpress({
-    entities: [User, Project, Complex, Building, Apartment, Request, PhoneCall],
+    entities: [User, Project, Complex, Building, Apartment, Request, PhoneCall, RequestHistory],
     controllers: [SignInController, UpdatePasswordController],
     dataProvider: async () => {
         // if (process.env['NODE_ENV'] === "production")

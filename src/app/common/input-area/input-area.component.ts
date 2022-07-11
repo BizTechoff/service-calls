@@ -22,6 +22,7 @@ export class InputAreaComponent implements OnInit {
     fields?: () => DataAreaFieldsSetting<any>[];
     areaSettings?: IDataAreaSettings,
     object?: any,
+    enableOk?: () => boolean,
     ok: () => void,
     cancel?: () => void,
     validate?: () => Promise<void>,
@@ -80,5 +81,6 @@ export class InputAreaComponent implements OnInit {
 
 export interface button {
   text: string,
-  click: ((close: () => void) => void);
+  click: ((close: () => void) => void),
+  disabled?: () => boolean
 }

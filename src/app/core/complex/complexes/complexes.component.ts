@@ -29,7 +29,9 @@ export class ComplexesComponent implements OnInit {
   get $() { return getFields(this, this.remult) };
 
   @DataControl<ComplexesComponent>({
-    valueChange: async (row, col) => await row?.refresh()
+    click: async (row, col) =>{ 
+      console.log('search.click')
+      await row?.refresh()}
   })
   @Fields.string({ caption: 'חיפוש מתחם' })
   search = ''//customSearch

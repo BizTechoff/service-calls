@@ -10,14 +10,15 @@
 </mat-dialog-content>
 <mat-dialog-actions>
 
-  <button mat-raised-button *ngFor="let b of args.buttons" (click)="buttonClick(b,$event)">
+  <button mat-raised-button *ngFor="let b of args.buttons" (click)="buttonClick(b,$event)"
+    [disabled]="b.disabled&&b.disabled()">
     {{b.text}}
   </button>
   <button type="button" mat-raised-button color="warning" (click)="this.dialogRef.close()">
     {{terms.cancel}}
   </button>
 
-  <button mat-raised-button color="accent" (click)="confirm()">
+  <button [disabled]="this.args.enableOk && !this.args.enableOk()" mat-raised-button color="accent" (click)="confirm()">
     {{terms.ok}}
   </button>
 

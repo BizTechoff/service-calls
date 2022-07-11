@@ -25,6 +25,11 @@ import { Space } from "./spaces";
             }
         }
     }
+    // options.saved= async row => {
+    //     if(row._.wasChanged()){
+    //         let his = await remult.repo(RequestHistory).insert(row)
+    //     }
+    // }
     options.backendPrefilter = () => // if removing this line? '()=>', call only once? every refresh?
         remult.user.isAdmin || remult.user.isBedek || remult.user.isBedekManager
             ? {}
@@ -67,8 +72,13 @@ export class Request extends IdEntity {
         }
     })
     building!: Building
-    @Field(() => Apartment, {
+
+    @DataControl<Request, Apartment>({
+        getValue: (row, col) => row?.$.apartment?.value?.number?.toString() ?? col?.value?.number?.toString()
+    })
+    @Field<Request, Apartment>(() => Apartment, {
         caption: 'דירה',
+        displayValue: (row, col) => row?.$.apartment?.value?.number?.toString() ?? col?.number?.toString(),
         validate: (row, col) => {
             if (!col?.value) {
                 col.error = terms.requiredField
@@ -106,6 +116,23 @@ export class Request extends IdEntity {
     })
     date!: Date
 
+    @DataControl({ width: '108' })
+    @Fields.dateOnly({
+        caption: 'תאריך שיבוץ',
+        validate: (row, col) => {
+            if (row.status !== RequestStatus.open) {
+                if (!col?.value) {
+                    col.error = terms.requiredField
+                }
+            }
+        }
+    })
+    assignDate!: Date
+
+    @DataControl({ width: '98' })
+    @Fields.string({ caption: 'שעת שיבוץ', inputType: 'time' })
+    assignTime = ''
+
     @DataControl({ width: '98' })
     @Field(() => Space, { caption: 'חלל' })
     space!: Space
@@ -139,11 +166,13 @@ export class Request extends IdEntity {
     })
     description = ''
 
+    @DataControl({ width: '98' })
     @Fields.number({ caption: 'מס.עובדים' })
-    workerCount!:number// = 0
+    workerCount!: number// = 0
 
+    @DataControl({ width: '98' })
     @Fields.number({ caption: 'מס.שעות' })
-    workHours!:number// = 0
+    workHours!: number// = 0
 
     @Fields.string({
         caption: 'תיאור הטיפול',

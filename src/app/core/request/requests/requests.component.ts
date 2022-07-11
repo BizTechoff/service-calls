@@ -263,7 +263,6 @@ export class RequestsComponent implements OnInit {
         disableClose: () => r._.wasChanged(),
         title: title,
         buttons:
-
           r.isNew()
             ? [{
               text: 'קבצים',
@@ -274,12 +273,21 @@ export class RequestsComponent implements OnInit {
               click: async () => await this.openFiles(r?.apartment?.id)
             },
             {
+              text: 'שלח מסר',
+              click: async () => await this.openFiles(r?.apartment?.id)
+            },
+            // {
+            //   text: 'הוסף סרטון',
+            //   click: async () => await this.openFiles(r?.apartment?.id)
+            // },
+            {
+              disabled: () => !(r.workHours > 0 && r.workerCount > 0),
               text: 'סגירת פנייה',
               click: async () => await this.openFiles(r?.apartment?.id)
             },
             {
               text: 'שיבוץ מטפל',
-              click: async () => await this.openFiles(r?.apartment?.id)
+              click: async () => await this.assignWorkers(r.id)
             },
             {
               text: 'דירה מעליו',
@@ -289,14 +297,36 @@ export class RequestsComponent implements OnInit {
               text: 'דירה מתחתיו',
               click: async () => await this.openApartmentBelow(r?.apartment?.id)
             }],
+        enableOk: () => r._.wasChanged(),
         ok: async () => { await r.save() },
         fields: () => [
           [
-            r.$.project,
-            r.$.complex,
-            r.$.building,
-            r.$.apartment,
-            r.$.tenant,
+            {
+              field: r.$.project,
+              getValue: (row, col) => row?.$.project?.value?.name ?? col?.value?.name,
+              hideDataOnInput: true
+            },
+            {
+              field: r.$.complex,
+              getValue: (row, col) => row?.$.complex?.value?.name ?? col?.value?.name,
+              hideDataOnInput: true
+            },
+            {
+              field: r.$.building,
+              getValue: (row, col) => row?.$.building?.value?.innerName ?? col?.value?.innerName,
+              hideDataOnInput: true
+            },
+            {
+              field: r.$.apartment,
+              getValue: (row, col) => row?.$.apartment?.value?.number?.toString() ?? col?.value?.number?.toString(),
+              hideDataOnInput: true
+            },
+            // r.$.flo
+            {
+              field: r.$.tenant,
+              getValue: (row, col) => row?.$.tenant?.value?.name ?? col?.value?.name,
+              hideDataOnInput: true
+            },
             r.$.status
           ],
           [
@@ -313,15 +343,65 @@ export class RequestsComponent implements OnInit {
             { field: r.$.subContractor, width: '100%' }
           ],
           [
-            { field: r.$.workerCount, width: '100%' },
-            { field: r.$.workHours, width: '100%' }
-          ],
-          r.$.workDescription
+            { field: r.$.workerCount, width: '98' },
+            { field: r.$.workHours, width: '98' },
+            { field: r.$.workDescription, width: '100%' }
+          ]
         ]
       },
       ref => ref?.ok ?? false)
     if (changed) {
       this.refresh()
+    }
+  }
+  async closeRequest(rid: string) {
+    if (!rid) rid = ''
+    if (!rid.trim().length) throw `assignWorkers(rid:${rid}) NOT VALID`
+    let r = await this.remult.repo(Request).findId(rid, { useCache: false })
+    if (!r) throw `assignWorkers(rid:${rid}) NOT EXISTS`
+    r.status = RequestStatus.close
+    await r.save()
+    this.refresh()
+  }
+
+  async assignWorkers(rid: string) {
+    if (!rid) rid = ''
+    if (rid.trim().length) {
+      let r = await this.remult.repo(Request).findId(rid, { useCache: false })
+      if (!r) throw `assignWorkers(rid:${rid}) NOT EXISTS`
+      let now = new Date()
+      r.assignDate = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+      r.assignTime = '10:00'// `${now.getHours()}:${now.getMinutes}`
+      let changed = await openDialog(InputAreaComponent,
+        ref => ref.args = {
+          title: 'שיבוץ מטפלים בפניה',
+          ok: async () => { await r.save() },
+          fields: () =>
+            [
+              r.$.inspector,
+              [
+                r.$.workManager,
+                r.$.subContractor
+              ],
+              [
+                { field: r.$.assignDate, width: '100%' },
+                { field: r.$.assignTime, width: '100%' }
+              ]
+            ]
+        },
+        ref => ref?.ok ?? false)
+      if (changed) {
+        this.refresh()
+      }
+
+      // let changed = await openDialog(AssignWorkersComponent,
+      //   ref => ref.args = {
+      //     rid: rid
+      //   },
+      //   ref => ref?.args.changed ?? false)
+      // if (changed) {
+      //   this.refresh()
+      // }
     }
   }
 
@@ -344,7 +424,7 @@ export class RequestsComponent implements OnInit {
       }
     }
     else {
-      this.dialog.info("openApartmentAbove(aid: '${aid}' NOT VALID")
+      this.dialog.info("openApartmentAbove(aid: '${aid}') NOT VALID")
     }
   }
 
@@ -367,7 +447,7 @@ export class RequestsComponent implements OnInit {
       }
     }
     else {
-      this.dialog.info("openApartmentBelow(aid: '${aid}' NOT VALID")
+      this.dialog.info("openApartmentBelow(aid: '${aid}') NOT VALID")
     }
   }
 

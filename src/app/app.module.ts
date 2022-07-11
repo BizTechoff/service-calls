@@ -38,6 +38,7 @@ import { CurrentStateComponent } from './core/current-state/current-state.compon
 
 import { ChartsModule } from 'ng2-charts';
 import { WorkManagersComponent } from './core/work-manager/work-managers/work-managers.component';
+import { AssignWorkersComponent } from './core/work-manager/assign-workers/assign-workers.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { WorkManagersComponent } from './core/work-manager/work-managers/work-ma
     InspectorsComponent,
     ConstructionContractorsComponent,
     CurrentStateComponent,
-    WorkManagersComponent
+    WorkManagersComponent,
+    AssignWorkersComponent
   ],
   imports: [
     BrowserModule,
